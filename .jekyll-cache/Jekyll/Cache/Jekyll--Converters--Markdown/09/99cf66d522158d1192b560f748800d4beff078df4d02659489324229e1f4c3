@@ -1,0 +1,158 @@
+I"<h1 id="jquery-ajax">jquery-Ajax</h1>
+
+<h3 id="一load方法异步请求数据">一.load()方法异步请求数据</h3>
+
+<ol>
+  <li>
+    <p><strong>load(url,[data],[callback])</strong></p>
+
+    <ul>
+      <li>url    :    为加载服务器地址;</li>
+      <li>data    :    参数为请求时发送的数据;</li>
+      <li>callback    :    参数为数据请求成功后，执行的回调函数;</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="二getjson方法异步加载json格式数据">二．getJSON()方法异步加载JSON格式数据</h3>
+
+<ol>
+  <li><strong>jQuery.getJSON(url,[data],[callback])</strong>   /
+**$.getJSON(url,[data],[callback]) **
+    <ul>
+      <li>url    :    参数为请求加载json格式文件的服务器地址;</li>
+      <li>data    :    参数为请求时发送的数据;</li>
+      <li>callback    :    参数为数据请求成功后，执行的回调函数;</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="三getscript方法异步加载并执行js文件">三．getScript()方法异步加载并执行js文件</h3>
+
+<ol>
+  <li>
+    <p><strong>jQuery.getScript(url,[callback])</strong>    /</p>
+
+    <p><strong>$.getScript(url,[callback])</strong></p>
+
+    <ul>
+      <li>url    :    为服务器请求地址;</li>
+      <li>callback    :    参数为数据请求成功后，执行的回调函数;</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="四get方法以get方式从服务器获取数据">四．get()方法以GET方式从服务器获取数据</h3>
+
+<ol>
+  <li>
+    <p><strong>$.get(url,[callback])</strong></p>
+
+    <ul>
+      <li>
+        <p>url    :    为服务器请求地址;</p>
+      </li>
+      <li>
+        <p>callback    :    参数为数据请求成功后，执行的回调函数;</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> $(function () {
+ 	$("#btnShow").bind("click", function () {
+ 		var $this = $(this);
+ 	　　$.get(
+ 	　　"http://www.imooc.com/data/info_f.php",
+ 	　　function(data) {
+         $this.attr("disabled", "true");
+         $("ul").append("&lt;li&gt;我的名字叫：" + data.name + "&lt;/li&gt;");
+         $("ul").append("&lt;li&gt;男朋友对我说：" + data.say + "&lt;/li&gt;");
+         }, 
+         "json");
+ 	})
+ });
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="五post方法以post方式从服务器发送数据">五.post()方法以POST方式从服务器发送数据</h3>
+
+<ol>
+  <li><strong>$.post(url,[data],[callback])</strong>
+    <ul>
+      <li>url    :    为服务器请求地址;</li>
+      <li>data    :    参数为请求时发送的数据;</li>
+      <li>callback    :    参数为数据请求成功后，执行的回调函数;</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="六serialize方法序列化表单元素值">六．serialize()方法序列化表单元素值</h3>
+
+<ol>
+  <li>
+    <p>使用<code class="highlighter-rouge">serialize()</code>方法可以将表单中有name属性的元素值进行序列化，生成标准URL编码文本字符串，直接可用于ajax请求，它的调用格式如下：</p>
+
+    <p><strong>$(selector).serialize()</strong></p>
+
+    <ul>
+      <li>其中<code class="highlighter-rouge">selector</code>参数是一个或多个表单中的元素或表单元素本身。</li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<p>### 七．ajax()方法加载服务器数据</p>
+
+<ol>
+  <li>
+    <p><strong>jQuery.ajax([settings])</strong>   /   <strong>$.ajax([settings])</strong></p>
+
+    <ul>
+      <li>
+        <p>settings  :  为发送ajax请求时的配置对象;其中：</p>
+
+        <ul>
+          <li>url表示服务器请求的路径；</li>
+          <li>ｄata为请求时传递的数据;</li>
+          <li>dataType为服务器返回的数据类型;</li>
+          <li>success为请求成功的执行的回调函数;</li>
+          <li>type为发送数据请求的方式，默认为get;</li>
+        </ul>
+      </li>
+      <li>
+        <p>```</p>
+        <ol>
+          <li>url表示服务器请求的路径；</li>
+          <li>ｄata为请求时传递的数据;</li>
+          <li>dataType为服务器返回的数据类型;</li>
+          <li>success为请求成功的执行的回调函数;</li>
+          <li>type为发送数据请求的方式，默认为get;
+```</li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<p>### 八．ajaxSetup()方法设置全局Ajax默认选项</p>
+
+<ol>
+  <li>
+    <p><strong>jQuery.ajaxSetup([options])</strong>   /<strong>$.ajaxSetup([options])</strong></p>
+
+    <p>options参数为一个对象，通过该对象设置Ajax请求时的全局选项值。</p>
+  </li>
+</ol>
+
+<p>### 九．ajaxStart()和ajaxStop()方法</p>
+
+<p>##### ajaxStart()方法用于在Ajax请求发出前触发函数</p>
+
+<p>##### ajaxStop()方法用于在Ajax请求完成后触发函数。它们的调用格式为：</p>
+
+<p><strong>$(selector).ajaxStart(function())</strong>   /<strong>$(selector).ajaxStop(function())</strong></p>
+
+<p>两个方法中括号都是绑定的函数，当发送Ajax请求前执行<code class="highlighter-rouge">ajaxStart()</code>方法绑定的函数，请求成功后，执行ajaxStop ()方法绑定的函数。</p>
+
+:ET

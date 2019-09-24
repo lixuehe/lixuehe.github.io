@@ -1,0 +1,191 @@
+I"*<h1 id="nodejs-视频知识-02">NodeJs-视频知识-02</h1>
+
+<h2 id="二服务器与客户端的连接与沟通">二.服务器与客户端的连接与沟通</h2>
+
+<blockquote>
+  <p><strong>套接字（socket）</strong>是一个抽象层，应用程序可以通过它发送或接收数据，可对其进行像对文件一样的打开、读写和关闭等操作。套接字允许应用程序将I/O插入到网络中，并与网络中的其他应用程序进行通信。网络套接字是IP地址与端口的组合。</p>
+</blockquote>
+
+<p><strong>实现功能:</strong></p>
+
+<ul>
+  <li>实现多个客户端连接服务器后,客户端给服务器发送的消息可以广播到所有的客户端</li>
+  <li><strong>当解决问题:一个客户端断开,再发送广播会报错</strong></li>
+</ul>
+
+<h4 id="服务器">服务器:</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var net=require('net');
+var clientList=[];
+var server=net.createServer(function(socket){
+	//当有客户端进行链接时,就进入这个方法,并且告知客户端,连接诶成功:
+    socket.write('客户端连接服务器成功:success!\r\n');
+    //socket.pipe(socket);
+    //data 就是接收的客户端传输来的内容
+    socket.on('data',function(data){
+        console.log("客户端说:"+data.toString());
+        //socket.write("我是服务器----");将固定的输出内容改为,接收的客户端发来的内容,病广播给所有连接本服务器的客户端
+         broadcast(data);
+    });
+    //没有写socket.end();的话不会自动结束,除非报错,会自动调用end();
+    socket.on('end',function () {
+    	//当有一个客户端中断连接之后,为了不报错,需要删除这个socket
+         var index=clientList.indexOf(socket);//查找这个Socket在数组中的下标
+         clientList.splice(index,1);//删除数组中的数据
+        // socket.write('end');//必须注释掉,不然会报错;
+    });
+});
+//每当接收到客户端发来的消息时,就进行广播,所有连接这个服务器的客户端都会收到这条消息
+function broadcast(data){
+    for(var i=0;i&lt;clientList.length;i++){
+        clientList[i].write(data);
+    }
+}
+server.listen(2222,'127.0.0.1');
+
+</code></pre></div></div>
+
+<h3 id="客户端">客户端</h3>
+
+<ul>
+  <li>host:自定义IP地址;</li>
+  <li>port:自定义端口号;</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var net=require('net');
+var hostname=process.argv[2];//补充学习中讲解
+var port=process.argv[3];
+var client =net.connect({host:hostname,port:port},function(){
+    console.log('connected to server');
+    //连接服务器成功,就发送给服务器一条消息,我是客户端;
+    //client.write('我是客户端\r\n');
+    //将上边的固定输出内容更改为用户自动输入,并将用户输入的内容发送给服务器;
+    //设置编码格式,用户可以输入中文;
+    process.stdin.setEncoding("utf8");
+    //当有键盘输入时,触发这个事件
+    process.stdin.on('readable',function(){
+        //读取数据
+        var chunk=process.stdin.read();
+        if(chunk!=null){
+            //将输入返回给服务器;
+            client.write('data:'+chunk);
+        }
+    })
+});
+client.on('data',function(data){
+	//将接收到的服务器发来的消息打印出来;
+    console.log("服务器说:"+data.toString());
+    //client.end();
+});
+//如果连接服务器后中间出现问题,即使没有调用end(),也会自动触发这个函数;
+client.on('end',function () {
+    console.log('disconnected from server');
+});
+</code></pre></div></div>
+
+<h3 id="indexof方法使用">indexOf()方法使用;</h3>
+
+<ul>
+  <li>
+    <p>数组中indexOf() 方法可返回某个指定的字符串值在字符串中首次出现的位置。</p>
+
+    <ul>
+      <li>
+        <p>语法
+<strong>stringObject.indexOf(searchvalue,fromindex)</strong></p>
+      </li>
+      <li>
+        <p>参数 描述</p>
+
+        <ul>
+          <li>searchvalue 必需。规定需检索的字符串值。</li>
+          <li>fromindex 可选的整数参数。规定在字符串中开始检索的位置。它的合法取值是 0到 - 1。如省略该参数，则将从字符串的首字符开始检索。IndexOf的使用:</li>
+          <li><img src="https://gss0.baidu.com/-4o3dSag_xI4khGko9WTAnF6hhy/zhidao/wh%3D600%2C800/sign=55f89dfa992bd4074292dbfb4bb9b269/5fdf8db1cb13495455ffebb6584e9258d0094a7a.jpg" alt="img" /></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="splice方法的使用">splice()方法的使用:</h3>
+
+<blockquote>
+  <p>注释：**该方法会改变原始数组。</p>
+
+  <h3 id="语法">语法</h3>
+
+  <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>arrayObject.splice(index,howmany,item1,.....,itemX)
+</code></pre></div>  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="text-align: left">参数</th>
+        <th style="text-align: left">描述</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="text-align: left">index</td>
+        <td style="text-align: left">必需。整数，规定添加/删除项目的位置，使用负数可从数组结尾处规定位置。</td>
+      </tr>
+      <tr>
+        <td style="text-align: left">howmany</td>
+        <td style="text-align: left">必需。要删除的项目数量。如果设置为 0，则不会删除项目。</td>
+      </tr>
+      <tr>
+        <td style="text-align: left">item1, …, itemX</td>
+        <td style="text-align: left">可选。向数组添加的新项目。</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 id="返回值">返回值</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="text-align: left">类型</th>
+        <th style="text-align: left">描述</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="text-align: left">Array</td>
+        <td style="text-align: left">包含被删除项目的新数组，如果有的话。</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 id="说明">说明</h3>
+
+  <p>splice() 方法可删除从 index 处开始的零个或多个元素，并且用参数列表中声明的一个或多个值来替换那些被删除的元素。</p>
+
+  <p>如果从 arrayObject 中删除了元素，则返回的是含有被删除的元素的数组。</p>
+</blockquote>
+
+<hr />
+
+<h3 id="补充学习">补充学习</h3>
+
+<h4 id="processargv的补充内容">Process.argv的补充内容</h4>
+
+<p><code class="highlighter-rouge">process </code>对象是一个全局变量，它提供当前 Node.js 进程的有关信息，以及控制当前 Node.js 进程。 因为是全局变量，所以无需使用 require()。</p>
+
+<p><code class="highlighter-rouge">process.argv </code>属性返回一个数组，这个数组包含了启动Node.js进程时的命令行参数，</p>
+
+<p><strong>其中：</strong></p>
+
+<ul>
+  <li>
+    <p>数组的第一个元素process.argv[0]——返回启动Node.js进程的可执行文件所在的绝对路径;</p>
+  </li>
+  <li>
+    <p>第二个元素process.argv[1]——为当前执行的JavaScript文件路径</p>
+  </li>
+  <li>
+    <p>剩余的元素为其他命令行参数;</p>
+  </li>
+</ul>
+
+:ET

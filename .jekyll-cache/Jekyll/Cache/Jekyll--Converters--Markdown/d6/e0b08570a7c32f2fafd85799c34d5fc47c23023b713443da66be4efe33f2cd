@@ -1,0 +1,161 @@
+I"�<p>#　React</p>
+
+<h3 id="九箭头函数">九.箭头函数</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// function expression
+function () { ... }
+// arrow function expression
+() =&gt; { ... }   //箭头函数
+</code></pre></div></div>
+
+<p>注意点：</p>
+
+<ul>
+  <li>箭头函数表达式会使用包含它的语境下的 this 对象;</li>
+  <li>当函数只有一个参数时，可省略括号，多个参数不可省略；</li>
+  <li>可以使用简洁函数替换块状函数体(花括号包含的内容),简洁函数的返回不用显示声明；</li>
+  <li>可移除掉函数的 return 表达式。</li>
+</ul>
+
+<p>简化后代码：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class App extends Component {
+  render() {
+    return (
+      &lt;div className="App"&gt;
+        {
+            //箭头函数的写法,简洁函数代替块状函数体；移除return返回值。
+            list.map(item =&gt;
+            &lt;div key={item.objectID}&gt;
+                  &lt;span&gt;
+                    &lt;a href={item.url}&gt;{item.title}&lt;/a&gt;
+                  &lt;/span&gt;
+                  &lt;span&gt;{item.author}&lt;/span&gt;
+                  &lt;span&gt;{item.points}&lt;/span&gt;
+                  &lt;span&gt;{item.num_comments}&lt;/span&gt;
+              &lt;/div&gt;
+          )
+        }
+      &lt;/div&gt;
+    );
+  }
+}
+export default App;
+
+</code></pre></div></div>
+
+<h3 id="十es6-类">十.ES6 类</h3>
+
+<p>类的例子</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Developer {
+	constructor(firstname, lastname) {
+		this.firstname = firstname;
+		this.lastname = lastname;
+	}
+	getName() {
+	return this.firstname + ' ' + this.lastname;
+}
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>创建了一个类：Developer；</p>
+  </li>
+  <li>
+    <p>创建一个用来实例化的构造函数，可以传入参数给类赋值，</p>
+  </li>
+  <li>
+    <p>可以定义函数（方法）；</p>
+  </li>
+  <li>
+    <p>实例化一个类</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const robin = new Developer('Robin', 'Wieruch');
+console.log(robin.getName());
+// output: Robin Wieruch
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>##　总结</p>
+
+<p>• React
+– 使用 create-react-app 创建一个 React 应用
+– JSX 混合使用了 HTML 和 JavaScript 在 React 组件的方法中定义它的输出
+– React 中,组件、示例和元素是不同的概念
+– ReactDOM.render() 是 React 应用连接 DOM 的入口方法
+– JavaScript 内建函数可以在 JSX 中使用</p>
+
+<ul>
+  <li>map 可以被用来把列表成员渲染成 HTML 的元素</li>
+</ul>
+
+<h2 id="react-特点">React 特点</h2>
+
+<ul>
+  <li><strong>1.声明式设计</strong> −React采用声明范式，可以轻松描述应用。</li>
+  <li><strong>2.高效</strong> −React通过对DOM的模拟，最大限度地减少与DOM的交互。</li>
+  <li><strong>3.灵活</strong> −React可以与已知的库或框架很好地配合。</li>
+  <li><strong>4.JSX</strong> − JSX 是 JavaScript 语法的扩展。React 开发不一定使用 JSX ，但我们建议使用它。</li>
+  <li><strong>5.组件</strong> − 通过 React 构建组件，使得代码更加容易得到复用，能够很好的应用在大项目的开发中。</li>
+  <li><strong>6.单向响应的数据流</strong> − React 实现了单向响应的数据流，从而减少了重复代码，这也是它为什么比传统数据绑定更简单。</li>
+</ul>
+
+<p>ES6
+• 根据不同的使用场景,选择用 const 和 let 来声明变量
+– 在 React 应用中尽量使用 const 来声明变量
+• 箭头函数可以用来是你的函数变得更简洁
+• 在 React 中,通过继承类的方式来声明组件</p>
+
+<hr />
+
+<p>####　练习中的知识点</p>
+
+<h5 id="一使用jsx指定属性">一.使用JSX指定属性:</h5>
+
+<p>可以使用引号将字符串文字指定为属性：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const element = &lt;div tabIndex="0"&gt;&lt;/div&gt;;
+</code></pre></div></div>
+
+<p>可以使用花括号在属性中嵌入JavaScript表达式：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const element = &lt;img src={user.avatarUrl}&gt;&lt;/img&gt;;
+</code></pre></div></div>
+
+<ul>
+  <li>问题：</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const user = {
+  firstName: 'Harper',
+  lastName: 'Perez',
+  avatarUrl:'dz4.png'  //将图片放在了public文件中，成功
+  //avatarUrl:'../image/dz4.png' //图片相对路径，失败
+  //avatarUrl:'/home/lixuehe/hackernews/image/dz4.png'//图片的绝对路径，失败
+  // avatarUrl:'https://www.imooc.com/static/img/newcomer.png'//网上图片，成功
+};
+//引入img的属性
+const element = &lt;img src={user.avatarUrl}&gt;&lt;/img&gt;;
+ReactDOM.render(                                                                                                                                                                       
+  element,
+  document.getElementById('root')
+);
+</code></pre></div></div>
+
+<p><strong>引入图片失败及解决办法：</strong></p>
+
+<ol>
+  <li>引入本地图片，图片位置在 hackernews文件下的image中，使用绝对路径与相对路径引入，都失败了；</li>
+  <li>引入网上任意图片，成功；</li>
+  <li>将图片放在public 中，在引入，成功;</li>
+  <li>引入外部模块的方式，引入图片，成功；</li>
+  <li>可能原因：
+    <ul>
+      <li>使用React 进行npm Start 后，路由获取为指定的public 中的文件。</li>
+    </ul>
+  </li>
+</ol>
+
+:ET

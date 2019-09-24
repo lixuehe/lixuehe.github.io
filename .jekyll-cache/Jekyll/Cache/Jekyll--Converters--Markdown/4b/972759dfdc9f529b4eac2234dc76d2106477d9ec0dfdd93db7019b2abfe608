@@ -1,0 +1,325 @@
+I"�,<h1 id="jquery">Jquery</h1>
+
+<h3 id="一选择器">一.选择器</h3>
+
+<ul>
+  <li>
+    <p>按ID查找—:<code class="highlighter-rouge">$('#id名称')</code>         返回一个jQuery对象,不存在返回[ ];</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// 查找&lt;div id="abc"&gt;:
+var div = $('#abc');
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>按照Tag查找—<code class="highlighter-rouge">$('tag名称')</code></p>
+  </li>
+  <li>
+    <p>按照class查找—<code class="highlighter-rouge">$('.class名称')</code></p>
+  </li>
+  <li>
+    <p>找到匹配任意一个类的元素:<code class="highlighter-rouge">$("div,span,p.myClass")</code></p>
+  </li>
+  <li>
+    <p>按照属性查找:</p>
+
+    <ul>
+      <li>
+        <p>当属性的值包含空格等特殊字符时，需要用双引号括起来;</p>
+      </li>
+      <li>
+        <p>按属性查找还可以使用前缀查找或者后缀查找：</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var icons = $('[name^=icon]'); // 找出所有name属性值以icon开头的DOM
+// 例如: name="icon-1", name="icon-2"
+var names = $('[name$=with]'); // 找出所有name属性值以with结尾的DOM
+// 例如: name="startswith", name="endswith"
+var icons = $('[class^="icon-"]'); // 找出所有class包含至少一个以`icon-`开头的DOM
+// 例如: class="icon-clock", class="abc icon-home"
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>组合查找:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//查找name=email 的input 输入框 
+var emailInput = $('input[name=email]'); // 不会找出&lt;div name="email"&gt;
+  
+//根据tag和class来组合查找:查找tr下的class为red的列
+var tr = $('tr.red'); // 找出&lt;tr class="red ..."&gt;...&lt;/tr&gt;
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>层级选择器:可以使用:<code class="highlighter-rouge">$('tag名称 tag名称')</code>来选择，层级之间用空格隔开。</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">&gt;</code>子选择器:<code class="highlighter-rouge">$('parent&gt;child')</code>类;</p>
+  </li>
+  <li>
+    <p>过滤器（Filter:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$('ul.lang li'); // 选出JavaScript、Python和Lua 3个节点
+$('ul.lang li:first-child'); // 仅选出JavaScript
+$('ul.lang li:last-child'); // 仅选出Lua
+$('ul.lang li:nth-child(2)'); // 选出第N个元素，N从1开始
+$('ul.lang li:nth-child(even)'); // 选出序号为偶数的元素
+$('ul.lang li:nth-child(odd)'); // 选出序号为奇数的元素
+  
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>表单元素</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:input：可以选择&lt;input&gt;，&lt;textarea&gt;，&lt;select&gt;和&lt;button&gt;；
+  
+:file：可以选择&lt;input type="file"&gt;，和input[type=file]一样；
+  
+:checkbox：可以选择复选框，和input[type=checkbox]一样；
+  
+:radio：可以选择单选框，和input[type=radio]一样；
+  
+:focus：可以选择当前输入焦点的元素，例如把光标放到一个&lt;input&gt;上，用$('input:focus')就可以选出；
+  
+:checked：选择当前勾上的单选框和复选框，用这个选择器可以立刻获得用户选择的项目，如$('input[type=radio]:checked')；
+  
+:enabled：可以选择可以正常输入的&lt;input&gt;、&lt;select&gt; 等，也就是没有灰掉的输入；
+  
+:disabled：和:enabled正好相反，选择那些不能输入的。
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$('div:visible'); // 所有可见的div
+$('div:hidden'); // 所有隐藏的div
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<hr />
+
+<h2 id="二查找和过滤">二.查找和过滤</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;!-- HTML结构 --&gt;
+&lt;ul class="lang"&gt;
+    &lt;li class="js dy"&gt;JavaScript&lt;/li&gt;
+    &lt;li class="dy"&gt;Python&lt;/li&gt;
+    &lt;li id="swift"&gt;Swift&lt;/li&gt;
+    &lt;li class="dy"&gt;Scheme&lt;/li&gt;
+    &lt;li name="haskell"&gt;Haskell&lt;/li&gt;
+&lt;/ul&gt;
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var ul = $('ul.lang'); // 获得&lt;ul&gt;
+var dy = ul.find('.dy'); // 获得JavaScript, Python, Scheme
+</code></pre></div></div>
+
+<h4 id="查找">查找:</h4>
+
+<ul>
+  <li>
+    <p>find();</p>
+  </li>
+  <li>parent():  从当前节点开始向上查找;</li>
+  <li>next():  位于同一层级的节点下一个;</li>
+  <li>prev():位于同一层级的节点上一个;</li>
+</ul>
+
+<h4 id="过滤">过滤</h4>
+
+<ul>
+  <li>
+    <p>filter():  过滤掉不符合选择器条件的节点:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var langs = $('ul.lang li'); // 拿到JavaScript, Python, Swift, Scheme和Haskell
+var a = langs.filter('.dy'); // 拿到JavaScript, Python, Scheme
+  
+//传入一个函数，要特别注意函数内部的this被绑定为DOM对象，不是jQuery对象：
+var langs = $('ul.lang li'); // 拿到JavaScript, Python, Swift, Scheme和Haskell
+langs.filter(function () {
+    return this.innerHTML.indexOf('S') === 0; // 返回S开头的节点
+}); // 拿到Swift, Scheme
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>map() :把一个jQuery对象包含的若干DOM节点转化为其他对象：</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var langs = $('ul.lang li'); // 拿到JavaScript, Python, Swift, Scheme和Haskell
+var arr = langs.map(function () {
+    return this.innerHTML;
+}).get(); // 用get()拿到包含string的Array：['JavaScript', 'Python', 'Swift', 'Scheme', 'Haskell']
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>first()   last()    slice():可以返回一个新的jQuery对象，把不需要的DOM节点去掉：</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var langs = $('ul.lang li'); // 拿到JavaScript, Python, Swift, Scheme和Haskell
+var js = langs.first(); // JavaScript，相当于$('ul.lang li:first-child')
+var haskell = langs.last(); // Haskell, 相当于$('ul.lang li:last-child')
+var sub = langs.slice(2, 4); // Swift, Scheme, 参数和数组的slice()方法一致
+</code></pre></div>    </div>
+
+    <ul>
+      <li>
+        <p>slice(start,end):  数组的截取—返回一个从start开始到end(不包括)的数组,不改变原有数组;</p>
+      </li>
+      <li>
+        <p>splice(index,howmany,item) :向/从数组中添加/删除项目，然后返回被删除的项目,改变原数组的结构;</p>
+
+        <p>—可以得到从index下标开始,长度为howmangy 的一个数组;</p>
+
+        <p>—index:规定添加/删除项目的位置，使用负数可从数组结尾处</p>
+
+        <p>—howmany:要删除的项目数量。如果设置为 0，则不会删除项目;</p>
+
+        <p>—item 向数组中添加的新项目;</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="三操作dom">三.操作DOM</h2>
+
+<ol>
+  <li>获取文本信息:</li>
+</ol>
+
+<ul>
+  <li>text():获取节点的文本;</li>
+  <li>html():获取原始HTML文本;</li>
+  <li>不传入参数是获取文本,传入参数是设置文本;</li>
+</ul>
+
+<ol>
+  <li>
+    <p>修改css:</p>
+
+    <ul>
+      <li><code class="highlighter-rouge">css('name', 'value')</code></li>
+    </ul>
+  </li>
+  <li>
+    <p>修改class属性:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var div = $('#test-div');
+div.hasClass('highlight'); // false， class是否包含highlight
+div.addClass('highlight'); // 添加highlight这个class
+div.removeClass('highlight'); // 删除highlight这个class
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>显示和隐藏DOM</p>
+
+    <p>show();显示;</p>
+
+    <p>hide():隐藏</p>
+  </li>
+  <li>
+    <p>attr 和 removeAttr()   操作DOM节点的属性    //prop方法类似attr</p>
+
+    <ol>
+      <li>获取属性:attr(‘属性名’);</li>
+      <li>设置属性:attr(“属性名”,”属性值”);</li>
+      <li>删除属性:removeAttr(“属性名”);</li>
+    </ol>
+  </li>
+  <li>
+    <p>操作表单:</p>
+
+    <ul>
+      <li>val(); 获取表单中的元素;</li>
+      <li>val(‘值’):设置表单的值;</li>
+    </ul>
+  </li>
+  <li>
+    <p>修改DOM结构:</p>
+
+    <ol>
+      <li><code class="highlighter-rouge">append()</code>把DOM添加到最后，<code class="highlighter-rouge">prepend()</code>则把DOM添加到最前。</li>
+      <li>同级节点可以用<code class="highlighter-rouge">after()</code>或者<code class="highlighter-rouge">before()</code>方法。</li>
+      <li>remove():  删除节点;</li>
+    </ol>
+  </li>
+</ol>
+
+<h2 id="事件">事件</h2>
+
+<ol>
+  <li>
+    <p>鼠标事件:</p>
+
+    <ul>
+      <li>click: 鼠标单击时触发；</li>
+      <li>dblclick：鼠标双击时触发；</li>
+      <li>mouseenter：鼠标进入时触发；</li>
+      <li>mouseleave：鼠标移出时触发；</li>
+      <li>mousemove：鼠标在DOM内部移动时触发；</li>
+      <li>hover：鼠标进入和退出时触发两个函数，相当于mouseenter加上mouseleave。</li>
+    </ul>
+  </li>
+  <li>
+    <p>键盘事件:键盘事件仅作用在当前焦点的DOM上，通常是<code class="highlighter-rouge">&lt;input&gt;</code>和<code class="highlighter-rouge">&lt;textarea&gt;</code>。</p>
+
+    <ul>
+      <li>keydown：键盘按下时触发；</li>
+      <li>keyup：键盘松开时触发；</li>
+      <li>keypress：按一次键后触发。</li>
+    </ul>
+  </li>
+  <li>
+    <p>其他事件;</p>
+
+    <ul>
+      <li>
+        <p>focus：当DOM获得焦点时触发；</p>
+      </li>
+      <li>
+        <p>blur：当DOM失去焦点时触发；</p>
+      </li>
+      <li>
+        <p>change：当<code class="highlighter-rouge">&lt;input&gt;</code>、<code class="highlighter-rouge">&lt;select&gt;</code>或<code class="highlighter-rouge">&lt;textarea&gt;</code>的内容改变时触发；</p>
+      </li>
+      <li>
+        <p>submit：当<code class="highlighter-rouge">&lt;form&gt;</code>提交时触发；</p>
+      </li>
+      <li>
+        <p>ready：当页面被载入并且DOM树完成初始化后触发.</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//正常的ready事件
+$(document).ready(function () {
+    // on('submit', function)也可以简化:
+    $('#testForm).submit(function () {
+        alert('submit!');
+    });
+});
+------------------------------------
+简化后:
+$(function () {
+    // init...
+});
+</code></pre></div>        </div>
+      </li>
+      <li>
+        <p>取消绑定:  <code class="highlighter-rouge">off('click', function)</code></p>
+
+        <ul>
+          <li>
+            <p>例如:</p>
+
+            <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function hello() {
+    alert('hello!');
+}
+a.click(hello); // 绑定事件
+       
+// 10秒钟后解除绑定:
+setTimeout(function () {
+    a.off('click', hello);
+}, 10000);
+</code></pre></div>            </div>
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+    <p>:last     :last-child</p>
+  </li>
+</ol>
+:ET

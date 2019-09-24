@@ -1,0 +1,204 @@
+I"_<h1 id="react基础">React基础</h1>
+
+<h3 id="十可复用组件">十.可复用组件</h3>
+
+<ul>
+  <li>声明一个Button组件，代替button元素</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Button extends Component{
+  render(){
+    const{
+      onClick,
+      //定义一个className属性，若没有指定className 属性,它的值就是一个空字符串,而			非undefined 。
+      className='',
+      children,
+    }=this.props;
+    return (
+      &lt;button 
+      onClick={onClick}
+      className={className}
+      type="button"
+      &gt;
+      {children}
+      &lt;/button&gt;
+    );
+  }
+}
+</code></pre></div></div>
+
+<ul>
+  <li>代替原本的button</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;span&gt;
+    &lt;Button onClick={() =&gt; onDismiss(item.objectID)}&gt;
+   	 	Dismiss
+    &lt;/Button&gt;
+&lt;/span&gt;
+</code></pre></div></div>
+
+<h4 id="react-不同的组件类型">React 不同的组件类型？</h4>
+
+<ul>
+  <li>函数式无状态组件:
+    <ul>
+      <li>这类组件就是函数,它们接收一个输入并返回一个输出。输入是props,输出就是一个普通的 JSX 组件实例;</li>
+      <li>函数式无状态组件是函数(函数式的),并且它们没有本地状态(无状态的),没有 this
+对象;</li>
+      <li>没有生命周期方法的；生命周期方法：constructor() and render() 。constructor 在一个组件的生命周期中只执行一次,而 render() 方法会在最开始执行一次,并且每次组件更新时都会执行；</li>
+    </ul>
+  </li>
+  <li>ES6 类组件:
+    <ul>
+      <li>在类的定义中,它们继承自 React 组件；</li>
+      <li>extend 会继承所有的生命周期方法，使用 render() 类方法；</li>
+      <li>可以使用 this.state 和 this.setState() ,你可以在 ES6 类组件中储存和操控 state；</li>
+    </ul>
+  </li>
+  <li>React.createClass:（不推荐使用）</li>
+</ul>
+
+<h4 id="将-searchtable-和-button-组件重构成函数式无状态组件">将 Search、Table 和 Button 组件重构成函数式无状态组件</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const isSearched=serachTeam=&gt;item=&gt;
+  item.title.toLowerCase().includes(serachTeam.toLowerCase());
+//App没有改动
+class　App extends Component{
+  //构造函数
+  constructor(){
+    super();
+    this.state={
+      list,
+      serachTeam:'',
+    }
+    //绑定删除函数
+    this.onDissmisss=this.onDissmisss.bind(this);
+    //绑定onSerachChange函数
+    this.onSerachChange=this.onSerachChange.bind(this);
+  }
+  //删除函数
+  onDissmisss(id){
+    // 找到除点击外的其他id
+    function isNotId(item){
+      return item.objectID!==id;
+    }
+    //在原数组中筛选包含其他id的一个新的数组
+    const updateList=this.state.list.filter(isNotId);
+    // 重新设置state
+    this.setState({list:updateList});
+  }
+  //onChange函数,event对象的target属性中带有输入框的值
+  onSerachChange(event){
+    // 得到我输入框的内容
+    this.setState({serachTeam:event.target.value});
+  }
+  // render()函数,onChange 当内容发生改变时触发
+  render(){
+    const {serachTeam,list}=this.state;
+    return(
+      &lt;div className="App"&gt;
+        {/* 用于搜索的输入组件 */}
+        &lt;Search
+          value={serachTeam}
+          onChange={this.onSerachChange}
+        &gt;Search&lt;/Search&gt;
+        {/* 用于展示的列表组件 */}
+        &lt;Table
+          list={list}
+          pattern={serachTeam}
+          onDissmisss={this.onDissmisss}
+        /&gt;
+        &lt;/div&gt;         
+    );
+  }               
+}
+//将Button组件重构成函数式无状态组件
+const Button=({onClick,className='',children,})=&gt;
+    &lt;button 
+      onClick={onClick}
+      className={className}
+      type="button"
+    &gt;
+      {children}
+    &lt;/button&gt;
+//将Search组件重构成函数式无状态组件
+const Search =({value,onChange,children})=&gt;
+  // const {value,onChange,children}=props;
+    &lt;form&gt;
+      {children}&lt;input
+      type="text"
+      value={value}
+      onChange={onChange}
+    /&gt;
+    &lt;/form&gt;
+//将Table组件重构成函数式无状态组件
+const Table=({list,pattern,onDissmisss})=&gt;
+    &lt;div&gt;
+      {list.filter(isSearched(pattern)).map(item=&gt;
+        &lt;div key={item.objectID}&gt;
+            &lt;span&gt;
+              &lt;a href={item.url}&gt;{item.title}&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;span&gt;{item.points}&lt;/span&gt;
+            &lt;span&gt;{item.author}&lt;/span&gt;
+            &lt;span&gt;{item.num_comments}&lt;/span&gt;
+            &lt;span&gt;
+              &lt;Button onClick={()=&gt;onDissmisss(item.objectID)}&gt;
+                Dissmiss  
+              &lt;/Button&gt; 
+            &lt;/span&gt;
+        &lt;/div&gt;
+        )}
+    &lt;/div&gt;
+export default App;
+
+</code></pre></div></div>
+
+<h3 id="十一给组件声明样式">十一.给组件声明样式</h3>
+
+<ul>
+  <li>
+    <p>在src/App.css 和 src/index.css 文件中修改样式的具体内容；</p>
+  </li>
+  <li>
+    <p>将以上编写好的样式应用到App Es6的组件中；即添加对应的className;</p>
+  </li>
+  <li>
+    <p>直接在JSX 中编写css样式</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const Table=({list,pattern,onDissmisss})=&gt;
+    &lt;div className="table"&gt;
+      {list.filter(isSearched(pattern)).map(item=&gt;
+        &lt;div key={item.objectID} className="table-row"&gt;
+            &lt;span style={midColumn}&gt;
+              &lt;a href={item.url}&gt;{item.title}&lt;/a&gt;
+            &lt;/span&gt;
+            &lt;span style={smallColumn}&gt;{item.points}&lt;/span&gt;
+            &lt;span style={largeColumn}&gt;{item.author}&lt;/span&gt;
+            &lt;span style={midColumn}&gt;{item.num_comments}&lt;/span&gt;
+            &lt;span style={midColumn}&gt;
+              &lt;Button onClick={()=&gt;onDissmisss(item.objectID)}
+                      className="button-inline"
+              &gt;
+                Dissmiss  
+              &lt;/Button&gt; 
+            &lt;/span&gt;
+        &lt;/div&gt;
+        )}
+    &lt;/div&gt;
+  
+// 定义一些css的style样式
+const largeColumn = {
+  width: '30%',
+  };
+  const midColumn = {
+  width: '20%',
+  };
+  const smallColumn = {
+  width: '10%',
+  };
+</code></pre></div>    </div>
+  </li>
+</ul>
+:ET

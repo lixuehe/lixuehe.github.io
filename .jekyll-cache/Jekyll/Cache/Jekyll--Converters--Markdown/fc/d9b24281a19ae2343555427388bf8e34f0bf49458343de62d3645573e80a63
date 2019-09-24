@@ -1,0 +1,218 @@
+I"�&<h1 id="阶段总结">阶段总结</h1>
+
+<h2 id="一个人进度总结">一.个人进度总结</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">序号</th>
+      <th style="text-align: left">项目</th>
+      <th style="text-align: left">进度</th>
+      <th style="text-align: left">开始时间</th>
+      <th style="text-align: left">结束时间</th>
+      <th>时长</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">1</td>
+      <td style="text-align: left">安装Linux系统</td>
+      <td style="text-align: left">任务</td>
+      <td style="text-align: left">19-7-17</td>
+      <td style="text-align: left">19-7-17</td>
+      <td>0.5天</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">2</td>
+      <td style="text-align: left">Lｉnux命令及md语法</td>
+      <td style="text-align: left">任务</td>
+      <td style="text-align: left">19-7-18</td>
+      <td style="text-align: left">19-7-19</td>
+      <td>1天</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">3</td>
+      <td style="text-align: left">C语言视频学习</td>
+      <td style="text-align: left">任务</td>
+      <td style="text-align: left">19-7-20</td>
+      <td style="text-align: left">19-7-22</td>
+      <td>2天</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">4</td>
+      <td style="text-align: left">第一阶段考核</td>
+      <td style="text-align: left">考核</td>
+      <td style="text-align: left">19-7-23</td>
+      <td style="text-align: left">19-7-24</td>
+      <td>1.5天</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">5</td>
+      <td style="text-align: left">Js-pdf文档</td>
+      <td style="text-align: left">任务</td>
+      <td style="text-align: left">19-7-24</td>
+      <td style="text-align: left">19-7-24</td>
+      <td>0.5天</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">6</td>
+      <td style="text-align: left">Js-轮播图//邮箱截取/信息验证</td>
+      <td style="text-align: left">考核</td>
+      <td style="text-align: left">19-7-25</td>
+      <td style="text-align: left">19-7-25</td>
+      <td>1天</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">7</td>
+      <td style="text-align: left">NodeJs文档</td>
+      <td style="text-align: left">任务</td>
+      <td style="text-align: left">19-7-26</td>
+      <td style="text-align: left">19-7-26</td>
+      <td>1天</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">8</td>
+      <td style="text-align: left">图形/函数</td>
+      <td style="text-align: left">考核</td>
+      <td style="text-align: left">19-7-27</td>
+      <td style="text-align: left">19-7-28</td>
+      <td>2天</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">9</td>
+      <td style="text-align: left">NodeJs视频</td>
+      <td style="text-align: left">任务</td>
+      <td style="text-align: left">19-7-29</td>
+      <td style="text-align: left">19-7-29</td>
+      <td>1天</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">10</td>
+      <td style="text-align: left">NodeJs搭建聊天室（解决Bug）</td>
+      <td style="text-align: left">考核</td>
+      <td style="text-align: left">19-7-29</td>
+      <td style="text-align: left">19-7-29</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">11</td>
+      <td style="text-align: left">Html/Css文档</td>
+      <td style="text-align: left">任务</td>
+      <td style="text-align: left">19-7-30</td>
+      <td style="text-align: left">19-7-31</td>
+      <td>1.5天</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">12</td>
+      <td style="text-align: left">固定html,制作三个页面</td>
+      <td style="text-align: left">考核</td>
+      <td style="text-align: left">19-7-31</td>
+      <td style="text-align: left">19-8-1</td>
+      <td>2天</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">13</td>
+      <td style="text-align: left">Bootstrap文档</td>
+      <td style="text-align: left">任务</td>
+      <td style="text-align: left">19-8-2</td>
+      <td style="text-align: left">19-8-3</td>
+      <td>2天</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">14</td>
+      <td style="text-align: left">使用Bootstrap-自适应页面</td>
+      <td style="text-align: left">考核</td>
+      <td style="text-align: left">19-8-4</td>
+      <td style="text-align: left">19-8-4</td>
+      <td>1天</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">15</td>
+      <td style="text-align: left">Sass文档</td>
+      <td style="text-align: left">任务</td>
+      <td style="text-align: left">19-8-5</td>
+      <td style="text-align: left">19-8-5</td>
+      <td>1天</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">16</td>
+      <td style="text-align: left">Sass编写栅格系统</td>
+      <td style="text-align: left">考核</td>
+      <td style="text-align: left">19-8-6</td>
+      <td style="text-align: left">19-8-6</td>
+      <td>0.5天</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">17</td>
+      <td style="text-align: left">Jquery廖雪峰及官方文档</td>
+      <td style="text-align: left">任务</td>
+      <td style="text-align: left">19-8-6</td>
+      <td style="text-align: left">19-8-11</td>
+      <td>5.5天</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">18</td>
+      <td style="text-align: left">注册/搭建服务器/ajax</td>
+      <td style="text-align: left">考核</td>
+      <td style="text-align: left">19-8-11</td>
+      <td style="text-align: left">19-8-16</td>
+      <td>5天</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">19</td>
+      <td style="text-align: left">设计书文档</td>
+      <td style="text-align: left">任务</td>
+      <td style="text-align: left">19-8-17</td>
+      <td style="text-align: left">19-8-19</td>
+      <td>2天</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">20</td>
+      <td style="text-align: left">仿慕课网首页</td>
+      <td style="text-align: left">考核</td>
+      <td style="text-align: left">19-8-19</td>
+      <td style="text-align: left">～</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left"> </td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="二知识总结">二.知识总结</h2>
+
+<ol>
+  <li>初始C语言，对C语言的基本知识进行了简单的了解及使用；</li>
+  <li>Linux和Vim 的基本命令掌握，但只能熟练使用一部分；</li>
+  <li>前端的三大部分,html/css/js及衍生的Bootstrap/Sass/jquery，可以使用自己的方式得到自己想要做到的效果，未能使用一些简单的手法及框架简化自己的代码，需要了解及加强学习；</li>
+  <li>掌握了简单的使用NodeJs 搭建服务器，及Nodejs 中的一些模块使用；</li>
+  <li>掌握了git的使用及工作流程；</li>
+</ol>
+
+<h2 id="三个人总结">三.个人总结</h2>
+
+<ul>
+  <li>第一阶段任务考核，发现自己知识学习的不扎实及不全面，而且没有重点，分析原因可能是环境的改变，学习方式的改变，以及自己心态没有很好的转换；</li>
+  <li>刚开始学习前端知识的时候，因为内容比较多，而且知识点之间相似度很高，导致自己学习的比较不清晰，但在慢慢任务考核中找到了自己学习的重点，慢慢总结了自己的学习方式，进而学习效率较之前有所提升，也随着心态的改变，自我的鼓励与安慰，学习状况也有所改变；</li>
+  <li>开始着手Jquery考核的过程中，发现了自己知识的健忘，及思路的不清晰，知识越学越多，却没有及时去复习，导致自己好多东西都知道，但是要用的时候忘了，或者使用错误，导致进度卡壳，总是需要去搜索，浪费了大量的时间，目前任务的解决办法就是不断的学习中要不断的复习，在学习中复习与巩固；</li>
+  <li>进行整组分享的学习及讨论的过程中，让我学到了合作及团队的重要性，从刚开始我们大家的糊里糊涂，手足无措，到后来的齐心协力，感受到了团队写作的力量，为了准备我们的组内分享，大家各司其职，明确分工，并且都很努力，而且在这个过程中让我们每个人都能够熟悉的使用git ,这是一个必须的技能，所以尽管我们为此花费了几天的时间，但这是值得的，是”物超所值”的。</li>
+  <li>开始仿慕课网后，发现自己总是会有奔溃的感觉，尤其是在前两天还在导航栏这里卡顿时，感觉自己想放弃，感觉很混乱，后来写完导航栏后，余老师检查了任务进度，并告诉我，要加快进度，要先写出大的框架，我刚开始是强迫自己按照这个模式去写，后来发现这样胡让自己的思路变得清晰，而且要按照自己的思路去搭建框架，不要全部按照慕课官网的代码进行仿照，这样会让自己陷入一个误区，看不懂他的代码，还写不出来，所以我总结了，要有自己的思路，然后细节支出再去仿照官网的效果；</li>
+  <li>自我的一个总结：
+    <ul>
+      <li>心态放平，没有什么是可以影响我们要有一颗快乐的心；</li>
+      <li>脚踏实地：知识学到是自己的，要一步一步走；</li>
+      <li>不骄不躁；遇到困难，自我解决，实在不行要记得求助，不要总是自己苦恼；</li>
+      <li>在学习中继续伸入学习并要不断复习；</li>
+      <li>给自己适当的压力，才能真正的提升进度，而不只是干着急；</li>
+      <li>合作共赢，自己学会，教会别人，与大家一起分享知识。</li>
+    </ul>
+  </li>
+</ul>
+
+:ET

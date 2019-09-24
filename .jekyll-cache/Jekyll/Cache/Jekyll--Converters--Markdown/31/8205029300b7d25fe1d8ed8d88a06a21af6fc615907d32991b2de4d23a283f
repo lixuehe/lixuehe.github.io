@@ -1,0 +1,149 @@
+I"<h1 id="react-基础">React 基础</h1>
+
+<h3 id="八组件的拆分">八.组件的拆分</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//拆分组件－－－－－－
+   const isSearched=serachTeam=&gt;item=&gt;
+      item.title.toLowerCase().includes(serachTeam.toLowerCase());
+
+  class　App extends Component{
+    //构造函数
+    constructor(){
+      super();
+      this.state={
+        list,
+        serachTeam:'',
+      }
+      //绑定删除函数
+      this.onDissmisss=this.onDissmisss.bind(this);
+      //绑定onSerachChange函数
+      this.onSerachChange=this.onSerachChange.bind(this);
+    }
+    //删除函数
+    onDissmisss(id){
+      // 找到除点击外的其他id
+      function isNotId(item){
+        return item.objectID!==id;
+      }
+      //在原数组中筛选包含其他id的一个新的数组
+      const updateList=this.state.list.filter(isNotId);
+      // 重新设置state
+      this.setState({list:updateList});
+    }
+    //onChange函数,event对象的target属性中带有输入框的值
+    onSerachChange(event){
+      // 得到我输入框的内容
+      this.setState({serachTeam:event.target.value});
+    }
+    // render()函数,onChange 当内容发生改变时触发
+    render(){
+      const {serachTeam,list}=this.state;
+      return(
+        &lt;div className="App"&gt;
+          {/* 用于搜索的输入组件 */}
+          &lt;Search
+          value={serachTeam}
+          onChange={this.onSerachChange}
+          /&gt;
+          {/* 用于展示的列表组件 */}
+          &lt;Table
+          list={list}
+          pattern={serachTeam}
+          onDissmisss={this.onDissmisss}
+          /&gt;
+          &lt;/div&gt;         
+      );
+    }               
+  }
+  //Search 组件
+  class Search extends Component{
+    render(){
+      // value={serachTeam},onChange={this.onSerachChange} 
+      const{value,onChange}=this.props;
+      return(
+        &lt;form&gt;
+        &lt;input type="text" 
+        value={value}
+        onChange={onChange}
+        /&gt;
+       &lt;/form&gt;  
+       );
+    }
+  }
+  //Table组件
+  class Table extends Component{
+    render(){
+      // list={list}, pattern={serachTeam},onDissmisss={this.onDissmisss}
+      const {list,pattern,onDissmisss}=this.props;
+      return(
+        &lt;div&gt;
+          {list.filter(isSearched(pattern)).map(item=&gt;
+            &lt;div key={item.objectID}&gt;
+               &lt;span&gt;
+                  &lt;a href={item.url}&gt;{item.title}&lt;/a&gt;
+                &lt;/span&gt;
+                &lt;span&gt;{item.points}&lt;/span&gt;
+                &lt;span&gt;{item.author}&lt;/span&gt;
+                &lt;span&gt;{item.num_comments}&lt;/span&gt;
+                &lt;span&gt;
+                  &lt;button
+                    onClick={()=&gt;onDissmisss(item.objectID)} 
+                    type="button"
+                  &gt;
+                    Dissmiss&lt;/button&gt;
+                  &lt;/span&gt;
+            &lt;/div&gt;
+            )}
+        &lt;/div&gt;
+        
+      )
+    }
+  }
+export default App;
+
+</code></pre></div></div>
+
+<ul>
+  <li>this.props 与 this.state 的区别：</li>
+</ul>
+
+<p>都用于描述组件的特性，可能会产生混淆。一个简单的区分方法是，this.props 表示那些一旦定义，就不再改变的特性，而 this.state 是会随着用户互动而产生变化的特性。</p>
+
+<h3 id="九可组合组件">九.可组合组件</h3>
+
+<p>在 props 对象中还有一个小小的属性可供使用: children 属性。通过它你可以将元素从上
+层传递到你的组件中,这些元素对你的组件来说是未知的,但是却为组件相互组合提供了
+可能性。</p>
+
+<h5 id="当只将一个文本字符串作为子元素传递到-search-组件中">当只将一个文本(字符串)作为子元素传递到 Search 组件中.</h5>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;Search
+    value={searchTerm}
+    onChange={this.onSearchChange}
+&gt;
+	//编写内容
+	Search
+&lt;/Search&gt;
+</code></pre></div></div>
+
+<p>#####　在 Search 组件可以从 props 对象中解构出 children 属性。然后它就可以指定这个 children应该显示在哪里。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Search extends Component {
+	render() {
+		const { value, onChange, children } = this.props;
+		return (
+			&lt;form&gt;
+				//制定显示位置
+				{children} 
+				&lt;input
+				type="text"
+				value={value}
+				onChange={onChange}
+				/&gt;
+			&lt;/form&gt;
+		);
+	}
+}
+</code></pre></div></div>
+
+:ET

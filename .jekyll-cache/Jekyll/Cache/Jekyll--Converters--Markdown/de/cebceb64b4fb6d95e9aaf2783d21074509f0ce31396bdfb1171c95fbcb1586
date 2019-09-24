@@ -1,0 +1,98 @@
+I"#
+<h3 id="each-与each">$.each() 与$().each()</h3>
+
+<h4 id="jqueryeach方法">jQuery.each()方法:</h4>
+
+<ul>
+  <li>
+    <p>jQuery.each() 函数用于<strong>遍历指定的对象和数组</strong>;</p>
+  </li>
+  <li>
+    <p>语法:  <code class="highlighter-rouge">$.each( object, callback )</code></p>
+
+    <ul>
+      <li>
+        <p><strong>object</strong>:  Object类型 指定需要遍历的对象或数组;</p>
+      </li>
+      <li>
+        <p><strong>callback</strong>:   Function类型 指定的用于循环执行的函数:</p>
+
+        <ul>
+          <li>function(index, value)</li>
+          <li>index:表示遍历的数组的下标;</li>
+          <li>value:表示下标对应的值;</li>
+        </ul>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$(function () { 
+    $.each([52, 97], function(index, value) {
+    	alert(index + ': ' + value);
+    });
+})
+//运行结果:
+0:52   1:97
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="jquery-each-方法">jQuery each() 方法</h4>
+
+<ul>
+  <li>
+    <p>each() 方法为每个匹配元素规定要运行的函数。</p>
+  </li>
+  <li>
+    <p>语法:  <code class="highlighter-rouge">$(*selector*).each(function*(index,element)*)</code></p>
+
+    <ul>
+      <li>
+        <p>function*(index,element) *  必需。为每个匹配元素规定运行的函数;</p>
+      </li>
+      <li>
+        <p><em>index</em> - 选择器的 index 位置;</p>
+      </li>
+      <li>
+        <p><em>element</em> - 当前的元素（也可使用 “this” 选择器）。</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//html-------------------
+&lt;button&gt;输出每个列表项的值&lt;/button&gt;
+&lt;ul&gt;
+    &lt;li&gt;Coffee&lt;/li&gt;
+    &lt;li&gt;Milk&lt;/li&gt;
+    &lt;li&gt;Soda&lt;/li&gt;
+&lt;/ul&gt;
+//js---------------------
+$("button").click(function(){
+    $("li").each(function(){
+        alert($(this).text())
+    });
+});
+//运行结果---------------
+//弹框依次弹出:  Coffee    Milk   Soda
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="二json中获取数据两种方式">二.json中获取数据两种方式:</h3>
+
+<h3 id="--和">[]  和.</h3>
+
+<h5 id="var-jsonnamelimingage18">var json={“name”:”liming”,”age”:”18”}</h5>
+
+<h5 id="想要得到liming-以下为两种方法">想要得到liming ,以下为两种方法</h5>
+
+<ul>
+  <li>
+    <h5 id="jsonname">json[“name”];</h5>
+  </li>
+  <li>
+    <h5 id="jsonname-1">json.name;</h5>
+  </li>
+</ul>
+
+<p>;</p>
+
+:ET

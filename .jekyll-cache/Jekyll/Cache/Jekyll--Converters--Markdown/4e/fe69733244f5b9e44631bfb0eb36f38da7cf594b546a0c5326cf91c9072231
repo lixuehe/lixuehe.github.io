@@ -1,0 +1,64 @@
+I"�	<h1 id="慕课首页">慕课首页</h1>
+
+<h4 id="一文本溢出">一.文本溢出</h4>
+
+<ol>
+  <li>
+    <p>单行文本溢出显示省略号：</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1、overflow:hidden; （超出限定的宽度就隐藏内容）
+   
+2、white-space: nowrap; （设置文字在一行显示不能换行）
+   
+3、text-overflow: ellipsis;（规定当文本溢出时显示省略符号来代表被修剪的文本）
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>多行文本溢出显示省略号：</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1、-webkit-line-clamp:2;（用来限制在一个块元素显示的文本的行数,2表示最多显示	2行.为了实现该效果，它需要组合其他的WebKit属性）
+   
+2、display: -webkit-box; （和1结合使用，将对象作为弹性伸缩盒子模型显示 ）
+   
+3、-webkit-box-orient:vertical;（ 和1结合使用 ，设置或检索伸缩盒对象的子元素的排列方式 。）
+   
+4、overflow:hidden; （顾名思义超出限定的宽度就隐藏内容）
+   
+5、text-overflow: ellipsis;（规定当文本溢出时显示省略符号来代表被修剪的文本）
+   
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<h3 id="二-moz-ms-webkit">二.-moz、-ms、-webkit:</h3>
+
+<ul>
+  <li>1、-moz代表firefox浏览器私有属性;</li>
+  <li>2、-ms代表<a href="https://www.baidu.com/s?wd=ie浏览器&amp;tn=SE_PcZhidaonwhc_ngpagmjz&amp;rsv_dl=gh_pc_zhidao">ie浏览器</a>私有属性;</li>
+  <li>3、-webkit代表safari、chrome私有属性;</li>
+  <li>这些是为了兼容老版本的写法;</li>
+</ul>
+
+<h3 id="三分享笔记">三.分享笔记</h3>
+
+<h4 id="1回到顶部的滑动效果实现">1.回到顶部的滑动效果实现：</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> $(function(){
+       $("#back").click(function() {
+        let time=setInterval(function(){
+            let top=document.documentElement.scrollTop;
+            if(top===0)
+                clearInterval(time);
+            else window.scrollTo(0,top-200);
+            },20);
+        })             
+    });
+ //top-200：每(20即0.002毫秒)top值减少200单位，当top值为０停止这个计时器活动；
+</code></pre></div></div>
+
+<h4 id="2算法与数据结构">2.算法与数据结构</h4>
+
+<p>https://mubu.com/doc/qPN4-WbGXF</p>
+
+<p>https://blog.csdn.net/hellozhxy/article/details/79911867</p>
+:ET

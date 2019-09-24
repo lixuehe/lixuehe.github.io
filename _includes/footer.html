@@ -1,0 +1,20 @@
+<!-- Footer Start -->
+
+<footer>
+
+    {% include social-buttons.html %}
+
+    <p><br><br></p>
+
+    <div class="container text-center">
+        <p>版权所有 &copy; {{ site.author }} {{ site.time | date: "%Y" }}</p>
+        {% if site.keybase-in-footer %}
+        <p style="font-size: 16px;"><a target="_blank"><i
+                class="fa fa-key"></i> 如有疑问，请及时联系！</a></p>
+        {% endif %}
+    </div>
+</footer>
+
+<p><br><br><br><br><br><br></p>
+
+<!-- Footer End -->

@@ -1,0 +1,85 @@
+I"�
+<h1 id="慕课首页">慕课首页</h1>
+
+<p>–遇到的问题及关于水哥分享的总结；</p>
+
+<h3 id="一并排显示div的使用">一.并排显示div的使用：</h3>
+
+<h4 id="方式1">方式1</h4>
+
+<p><strong>浮动:</strong> 子元素 float + 父元素::after{display:block;clear:both;}</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1) 父元素 清除浮动
+2) 父元素 加宽 18 px           1152px + 18px
+3) 父元素 左边距  -18px
+
+4) 子元素 浮动
+5) 子元素 设置 左边距  18px   下边距 12px
+</code></pre></div></div>
+
+<h4 id="方式2">方式2</h4>
+
+<p><strong>弹性:</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>父元素 {
+	display: flex;
+	flex-wrap: wrap;  // 超出自动换行
+	justify-content: space-between;  // 两端顶头对齐,中间平均空白
+	align-content: flex-start;   // 行与行之间紧挨,可以再用 margin 调整
+}
+子元素 {
+	没有过多设置
+}
+
+好处: 不用清除浮动, 不用设置边距
+</code></pre></div></div>
+
+<h3 id="二垂直居中">二.垂直居中</h3>
+
+<p><strong>尝试1:  line-height: 一般为父元素高度</strong></p>
+
+<p><strong>尝试2:  转为块元素，margin-top 向下顶   or  margin-bottom 向上顶, 负值也可以尝试</strong></p>
+
+<p><strong>尝试3:  定位 position:relative; top=xxx; left=xxx;  调整</strong></p>
+
+<p><strong>尝试4:  在 box-sizing:border-box; 情况下, 用 padding-top 或 padding-bottom调整</strong></p>
+
+<p><strong>尝试5:  行内元素, 有填充高度 ＝&gt;  vertical-align: 像素或百分比;</strong></p>
+
+<p><strong>尝试6: 弹性</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>父元素 {
+		display: flex;
+		align-items: center;   
+}
+子元素  重直居中    无要求
+</code></pre></div></div>
+
+<h3 id="三轮播图">三.轮播图</h3>
+
+<h3 id="swiper">swiper</h3>
+
+<p>1.官网  https://www.swiper.com.cn/</p>
+
+<p>2.使用简介   查看 <strong>在线演示</strong>     查看网页源代码, 而不是 Elements</p>
+
+<p>3.审查元素, 尝试修改重写局部样式(重点);</p>
+
+<h4 id="bootstrap">Bootstrap</h4>
+
+<p>1.使用Bootstrap 3的轮播图效果，</p>
+
+<p>2.要看好具体控制的类名；</p>
+
+<p>3.使用类选择器前要加标签；</p>
+
+<h3 id="四box-sizing---宽高问题">四.box-sizing   宽高问题</h3>
+
+<p><strong>box-sizing: border-box;</strong>     设置 width = content + padding + border</p>
+
+<p><strong>box-sizing: content-box;</strong>    设置 width = content</p>
+
+<p><strong>标准规范值:</strong>   width 只包含  内容(content)区域</p>
+
+<p><strong>Bootstrap:</strong>   width 包含 内容 + 填充 + 边框</p>
+:ET

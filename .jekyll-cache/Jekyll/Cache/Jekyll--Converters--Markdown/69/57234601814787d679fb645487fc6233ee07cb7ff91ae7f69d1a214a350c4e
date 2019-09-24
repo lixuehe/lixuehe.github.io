@@ -1,0 +1,129 @@
+I"�<h1 id="慕课网主页">慕课网主页</h1>
+
+<ol>
+  <li>
+    <p>CSS vertical-align 属性</p>
+
+    <p>vertical-align 属性设置一个元素的垂直对齐方式。</p>
+
+    <p>该属性定义行内元素的基线相对于该元素所在行的基线的垂直对齐。允许指定负长度值和百分比值。这会使元素降低而不是升高。在表单元格中，这个属性会设置单元格框中的单元格内容的对齐方式。</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="text-align: left">默认值：</th>
+          <th>baseline</th>
+          <th> </th>
+          <th> </th>
+          <th> </th>
+          <th> </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align: left">继承：</td>
+          <td>no</td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+        </tr>
+        <tr>
+          <td style="text-align: left">版本：</td>
+          <td>CSS1</td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+        </tr>
+        <tr>
+          <td style="text-align: left">JavaScript 语法：</td>
+          <td><em>object</em>.style.verticalAlign=”bottom”</td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+        </tr>
+        <tr>
+          <td style="text-align: left"> </td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 id="属性值">属性值</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="text-align: left">值</th>
+          <th style="text-align: left">描述</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align: left">baseline</td>
+          <td style="text-align: left">默认。元素放置在父元素的基线上。</td>
+        </tr>
+        <tr>
+          <td style="text-align: left">sub</td>
+          <td style="text-align: left">垂直对齐文本的下标。</td>
+        </tr>
+        <tr>
+          <td style="text-align: left">super</td>
+          <td style="text-align: left">垂直对齐文本的上标</td>
+        </tr>
+        <tr>
+          <td style="text-align: left"><em>-webkit-user-drag<strong>:* *none</strong>;</em></td>
+          <td style="text-align: left">把元素的顶端与行中最高元素的顶端对齐</td>
+        </tr>
+        <tr>
+          <td style="text-align: left">text-top</td>
+          <td style="text-align: left">把元素的顶端与父元素字体的顶端对齐</td>
+        </tr>
+        <tr>
+          <td style="text-align: left">middle</td>
+          <td style="text-align: left">把此元素放置在父元素的中部。</td>
+        </tr>
+        <tr>
+          <td style="text-align: left">bottom</td>
+          <td style="text-align: left">把元素的底端与行中最低的元素的顶端对齐。</td>
+        </tr>
+        <tr>
+          <td style="text-align: left">text-bottom</td>
+          <td style="text-align: left">把元素的底端与父元素字体的底端对齐。</td>
+        </tr>
+        <tr>
+          <td style="text-align: left">length</td>
+          <td style="text-align: left"> </td>
+        </tr>
+        <tr>
+          <td style="text-align: left">%</td>
+          <td style="text-align: left">使用 “line-height” 属性的百分比值来排列此元素。允许使用负值</td>
+        </tr>
+        <tr>
+          <td style="text-align: left"> </td>
+          <td style="text-align: left"> </td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ol>
+
+<hr />
+
+<p>data-ride=”carousel”: 属性用于标记轮播在页面加载时就开始动画播放，无需使用初始化的js函数</p>
+
+<p>data-interval=”秒数”自动切换的秒数</p>
+
+<p>&lt;：转义字符为<code class="highlighter-rouge">&amp;lt;</code></p>
+
+<p>&gt;：转义字符为<code class="highlighter-rouge">&amp;gt;</code></p>
+
+<hr />
+
+:ET

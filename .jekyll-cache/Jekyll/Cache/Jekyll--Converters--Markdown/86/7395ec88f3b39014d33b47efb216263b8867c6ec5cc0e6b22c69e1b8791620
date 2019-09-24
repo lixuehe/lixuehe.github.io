@@ -1,0 +1,85 @@
+I"�
+<h3 id="8-14分享">8-14分享</h3>
+
+<p>#####　1.使用input输入框进行非空验证方法:</p>
+
+<ul>
+  <li>判断输入框内容是否为空字符串，<code class="highlighter-rouge">$(".class").val()==''</code>;</li>
+  <li>判断输入框内容长度是否为０：<code class="highlighter-rouge">$(".class").val().length==0</code>;</li>
+  <li>var str1 = null; 　　　str引用为空；
+var str2 = “”;　　　　 str引用一个空字符串；
+也就是null没有分配空间，”“分配了空间，因此str1还不是一个实例化的对象，而str2已经实例化。</li>
+</ul>
+
+<h5 id="2选择器中的last---last-child">2.选择器中的last   last-child</h5>
+
+<ul>
+  <li>
+    <p>:last:  获取匹配的最一个元素</p>
+  </li>
+  <li>
+    <p>:last-child  :匹配最后一个子元素</p>
+
+    <p><a href="http://jquery.cuishifeng.cn/last_1.html">:last</a> 只匹配最后一个元素，而last-child将为每个父元素匹配最后一个子元素</p>
+  </li>
+  <li>
+    <p>:last-of type: 匹配E的父元素的最后一个E类型的孩子</p>
+  </li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>有关代码：test1.html
+function test(){
+    var name=$(".name").val();
+    alert(typeof(name));
+    //进行姓名的非空验证
+    if(name==''){
+    alert("空字符串");
+    }
+    if(name ==null){
+    alert("用户名为空，注册失败！");
+    }
+    if(name!=null){
+    alert("恭喜您,注册成功!");
+    }
+    else{
+    alert("用户名为空，注册失败！");
+    }
+
+    var str=null;
+    var str1='null';
+    alert(str);
+    alert( typeof(str));
+    var str1='';
+    alert( typeof(str1));
+}     
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>有关代码：html2
+&lt;body&gt;
+    &lt;h3&gt;last 与　last-child&lt;/h3&gt;
+    &lt;ul&gt;
+        &lt;li&gt;list item 1&lt;/li&gt;
+        &lt;li&gt;list item 2&lt;/li&gt;
+        &lt;li&gt;list item 3&lt;/li&gt; 
+        &lt;span&gt;last-span&lt;/span&gt;    
+    &lt;/ul&gt; 
+    &lt;ul&gt;
+        &lt;li&gt;list item 1&lt;/li&gt;
+        &lt;li&gt;list item 2&lt;/li&gt;
+        &lt;li&gt;list item 3&lt;/li&gt; 
+        &lt;span&gt;last-span&lt;/span&gt;   
+    &lt;/ul&gt; 
+&lt;/body&gt;
+&lt;script&gt;
+    //----------------之前的困惑-----------------------
+    var last=$('ul:last');
+    var lastChild=$('ul:last-child');
+    console.log(last);     
+    console.log(lastChild);    
+    //-------------------效果演示------------------------
+    last.css({"border":"1px solid blue"});
+    //  lastChild.css({"border":"1px solid blue"});        
+&lt;/script&gt;
+</code></pre></div></div>
+
+:ET

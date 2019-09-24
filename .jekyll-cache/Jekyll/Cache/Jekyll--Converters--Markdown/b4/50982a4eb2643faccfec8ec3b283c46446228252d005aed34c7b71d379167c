@@ -1,0 +1,99 @@
+I"�<h2 id="git">Git</h2>
+
+<h4 id="创建本地仓库">创建本地仓库</h4>
+
+<ol>
+  <li>新建文件夹；</li>
+  <li>终端输入<code class="highlighter-rouge">git init</code>   :初始化为一个空的本地库；</li>
+</ol>
+
+<h4 id="连接远程仓库">连接远程仓库</h4>
+
+<ul>
+  <li>已有本地库，本地库中终端操作：<code class="highlighter-rouge">$ git remote add origin https://github.com/lixuehe/aaa.git</code>
+    <ul>
+      <li><code class="highlighter-rouge">origin</code>： 默认的远程库的名字，可以修改；</li>
+      <li><code class="highlighter-rouge">https://github.com/lixuehe/aaa.git</code>:要连接的远程库的地址；</li>
+    </ul>
+  </li>
+  <li>向远程库推送：
+    <ul>
+      <li><code class="highlighter-rouge">git push -u origin master</code>第一次推送master分支的所有内容；</li>
+      <li>此后，每次本地提交后，只要有必要，就可以使用命令<code class="highlighter-rouge">git push origin master</code>推送最新修改；</li>
+    </ul>
+  </li>
+  <li>从远程库克隆本地库
+    <ul>
+      <li><code class="highlighter-rouge">git clonehttps://github.com/lixuehe/aaa.git</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="创建与合并分支">创建与合并分支</h4>
+
+<ul>
+  <li>查看分支：<code class="highlighter-rouge">git branch</code>      当前分支前面会标一个<code class="highlighter-rouge">*</code>号。
+    <ul>
+      <li>git branch 列出当前分支清单</li>
+      <li>git branch -a 查看远程分支和本地分支</li>
+      <li>git branch -v 查看各个分支最后一个提交信息</li>
+      <li>git branch –merged 查看哪些分支已经合并入当前分支</li>
+    </ul>
+  </li>
+  <li>
+    <p>创建分支：<code class="highlighter-rouge">git branch &lt;name&gt;</code></p>
+  </li>
+  <li>
+    <p>切换分支：<code class="highlighter-rouge">git checkout &lt;name&gt;</code></p>
+  </li>
+  <li>
+    <p>创建+切换分支：<code class="highlighter-rouge">git checkout -b &lt;name&gt;</code></p>
+  </li>
+  <li>
+    <p>合并某分支到当前分支：<code class="highlighter-rouge">git merge &lt;name&gt;</code></p>
+  </li>
+  <li>删除分支：
+    <ul>
+      <li>删除本地test分支：<code class="highlighter-rouge">git branch -d test</code></li>
+      <li>test分支还没有合入当前分支，所以要用-D参数才能删掉。：<code class="highlighter-rouge">git branch -D test </code></li>
+      <li>删除远程test分支:<code class="highlighter-rouge">git push origin --delete test</code></li>
+      <li>删除远程test分支<code class="highlighter-rouge">git push origin :test</code></li>
+    </ul>
+  </li>
+  <li>拉取分支 :
+    <ul>
+      <li>git fetch origin 同步远程服务器的数据到本地</li>
+      <li>git checkout -b test origin/test_remote 将远程分支test_remote拉取下来到本地test分支</li>
+      <li>git checkout test 将远程分支test拉取下来到本地test分支</li>
+      <li>git pull test从远程分支test 中checkout下来的本地分支test成为跟踪分支，使用git pull或者git push就会操作到对应的远程分支test</li>
+    </ul>
+  </li>
+  <li>
+    <p>合并分支</p>
+
+    <ul>
+      <li>
+        <p>在个人分支上进行了文件提交与推送／或者有他人的分支进行了文件推送；</p>
+      </li>
+      <li>
+        <p>切换至<code class="highlighter-rouge">master</code>；</p>
+
+        <ul>
+          <li>
+            <p><code class="highlighter-rouge">git fetch</code>命令用于从另一个存储库下载对象和引用。</p>
+          </li>
+          <li>
+            <p><code class="highlighter-rouge">git merge</code>命令用于合并指定分支到当前分支：</p>
+
+            <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git merge &lt;分支name&gt;
+</code></pre></div>            </div>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>git remote 不带参数，列出已经存在的远程分支</p>
+
+:ET

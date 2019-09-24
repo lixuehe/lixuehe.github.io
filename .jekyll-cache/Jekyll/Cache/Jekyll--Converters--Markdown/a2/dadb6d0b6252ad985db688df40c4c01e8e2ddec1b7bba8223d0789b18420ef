@@ -1,0 +1,83 @@
+I"<h1 id="c语言">C语言</h1>
+
+<h2 id="重识c语言">重识C语言</h2>
+
+<ol>
+  <li>
+    <p>C语言是什么：人类和计算机交流的一种方式。</p>
+  </li>
+  <li>
+    <p>C语言的特点：简单，快速，高性能，兼容性好，功能强大，易于学习。</p>
+  </li>
+  <li>
+    <p>C语言能作什么：小巧灵活，语法简单，适合作小程序/小工具；和硬件打交道的程序；高性能要求的应用程序。</p>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="linux-c语言常用指令">Linux C语言–常用指令</h2>
+
+<ul>
+  <li>
+    <p>sudo :表示使用管理员权限；</p>
+  </li>
+  <li>apt-get :是一条linux命令，适用于deb包管理式的操作系统，主要用于自动从互联网的软件仓库中搜索、安装、升级、卸载软件或操作系统；</li>
+  <li>clear：清洁屏幕；</li>
+</ul>
+
+<h4 id="输入命令前检查文本编译器">输入命令前检查文本编译器</h4>
+
+<ol>
+  <li>文本编辑器:emacs /vim    –安装vim
+    <ol>
+      <li>打开终端;</li>
+      <li>查看并更新最新版本vim:  <code class="highlighter-rouge">sudo apt-get update</code> ；</li>
+      <li>安装最新版本vim:<code class="highlighter-rouge">sudo apt-get install vim；</code></li>
+    </ol>
+  </li>
+  <li>检查编译器
+    <ol>
+      <li>输入 ：<code class="highlighter-rouge">cc -v</code>；</li>
+      <li>若显示 <code class="highlighter-rouge">not found</code> 则输入<code class="highlighter-rouge">sudo apt install gcc</code>进行安装；</li>
+      <li>可输入：<code class="highlighter-rouge">cc -v</code>再次查看；</li>
+      <li>gcc是GNU编译器套件（GNU Compiler Collection），它包括了<a href="https://baike.baidu.com/item/C/7252092">C</a>、<a href="https://baike.baidu.com/item/C%2B%2B">C++</a>、<a href="https://baike.baidu.com/item/Objective-C">Objective-C</a>、<a href="https://baike.baidu.com/item/Fortran">Fortran</a>、<a href="https://baike.baidu.com/item/Java/85979">Java</a>、<a href="https://baike.baidu.com/item/Ada/5606819">Ada</a>和<a href="https://baike.baidu.com/item/Go语言">Go语言</a>的前端，也包括了这些语言的库（如libstdc++、libgcj等等）。</li>
+    </ol>
+  </li>
+</ol>
+
+<p>#### 文件和目录</p>
+
+<blockquote>
+  <p>cd:是Change Directory的缩写，用来切换工作目录，语法：cd [相对或绝对路径或特殊符号]</p>
+</blockquote>
+
+<ol>
+  <li><code class="highlighter-rouge">cd ~</code>:进入当前用户的子目录；</li>
+  <li><code class="highlighter-rouge">pwd</code>:查看当前所在位置,显示工作路径（Print Working Directory 的缩写）;</li>
+  <li><code class="highlighter-rouge">ls</code>:列出当前目录下所包含的所有文件  (List的缩写) ；</li>
+  <li><code class="highlighter-rouge">ls -l</code>：详细列出当前目录下所有文件的类型/创建时间/用户权限等信息:
+    <ol>
+      <li>文件最前是<code class="highlighter-rouge">d</code>开头，代表是一个目录；</li>
+      <li>文件最前是<code class="highlighter-rouge">-</code>开头，代表是一个文件；</li>
+    </ol>
+  </li>
+  <li><code class="highlighter-rouge">touch lens1</code> 创建一个名为lens1 的文件；</li>
+  <li><code class="highlighter-rouge">rm abcd</code> 删除名为abcd的文件；</li>
+  <li><code class="highlighter-rouge">mkdir  workspace</code> 创建一个名为workspace的文件夹；</li>
+  <li><code class="highlighter-rouge">vim/vi</code>进入输入  编辑文件状态，默认j进入vim 为命令模式，无法进行数据的编辑及插入；<code class="highlighter-rouge">esc</code>进入命令模式；</li>
+  <li><code class="highlighter-rouge">命令模式转插入模式：i</code>进入插入模式，并且在光标前插入，<code class="highlighter-rouge">a</code>在光标后插入；</li>
+  <li><strong>命令模式下：</strong>
+    <ol>
+      <li><code class="highlighter-rouge">w</code>表示保存；<code class="highlighter-rouge">q</code>退出</li>
+      <li>ls：查看当前目录下的文件  ls-l查看当前目录下的文件及详细信息</li>
+      <li>（需要<code class="highlighter-rouge">shift+：</code>再输入wq）a.cac.</li>
+      <li>shift a<code class="highlighter-rouge">在当前行首进行插入；+Enter</code></li>
+      <li><code class="highlighter-rouge">o</code>自动下一行插入；<code class="highlighter-rouge">shift+o</code>上一行插入；./</li>
+      <li><code class="highlighter-rouge">x</code>删除当前字符；</li>
+      <li><code class="highlighter-rouge">dd</code>删除当前行；</li>
+    </ol>
+  </li>
+</ol>
+
+:ET

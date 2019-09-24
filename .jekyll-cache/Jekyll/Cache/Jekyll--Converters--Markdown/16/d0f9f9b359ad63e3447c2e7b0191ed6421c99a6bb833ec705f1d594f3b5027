@@ -1,0 +1,20 @@
+I"�<h1 id="jqueryjob-注册">JqueryJob 注册</h1>
+
+<p>获取input输入框中的值:当没有输入任何值时,输入框的值为”“空字符串,不为null</p>
+
+<p>JSON.stringify方法将数据对象转换成一个字符串</p>
+
+<p>JSON.parse方法将字符串转换成对象</p>
+
+<p>追加写入文件：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fs.appendFile
+</code></pre></div></div>
+
+<h5 id="ajax跨域问题">ajax跨域问题</h5>
+
+<p>NOdejs解决</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>res.header("Access-Control-Allow-Origin", "*");
+</code></pre></div></div>
+:ET

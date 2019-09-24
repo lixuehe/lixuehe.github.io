@@ -1,0 +1,138 @@
+I"�<h1 id="慕课首页">慕课首页</h1>
+
+<ol>
+  <li>
+    <p><strong>word-break属性：规定自动换行的处理方法。</strong></p>
+
+    <p><strong>提示：</strong>通过使用 word-break 属性，可以让浏览器实现在任意位置的换行。</p>
+
+    <h2 id="语法">语法</h2>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>word-break: normal|break-all|keep-all;
+</code></pre></div>    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="text-align: left">值</th>
+          <th style="text-align: left">描述</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align: left">normal</td>
+          <td style="text-align: left">使用浏览器默认的换行规则。</td>
+        </tr>
+        <tr>
+          <td style="text-align: left">break-all</td>
+          <td style="text-align: left">允许在单词内换行。</td>
+        </tr>
+        <tr>
+          <td style="text-align: left">keep-all</td>
+          <td style="text-align: left">只能在半角空格或连字符处换行。</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>
+    <p><strong>transtion　过渡动画</strong></p>
+
+    <p>语法：(所有时长单位都是秒)</p>
+
+    <ul>
+      <li>变化属性（transtion-proerty(属性名)）</li>
+      <li>持续时长（transtion-duration(持续时长)）必填项，默认为０；</li>
+      <li>变化曲线（transtion-timing-function）;</li>
+      <li>延迟时长（transtion-delay）</li>
+    </ul>
+
+    <p><strong>当失去触发时机的时候，还会动画返回原来的状态</strong></p>
+
+    <ul>
+      <li>
+        <p><strong>transition-timing-function：变化速率</strong></p>
+
+        <p>1.ease(默认值):先快再快再慢</p>
+
+        <p>2.ease-in:淡入(动画刚开始的时候变化慢)</p>
+
+        <p>3,ease-out:淡出(动画快结束的时候变化慢)</p>
+
+        <p>4.ease-in-out:淡入淡出</p>
+
+        <p>5.linear:匀速变化</p>
+
+        <p>6.cubic-bezier:贝塞尔曲线,所有的变化都可以用贝塞 尔曲线来代替 cubic-bezier(x1,y1,x2,y2),x1,y1,x2,y2值的范围都是0~1</p>
+      </li>
+      <li>
+        <p><strong>过渡动画没有自己的触发时机,只有以下几种,可以触发过渡动画:</strong></p>
+      </li>
+    </ul>
+
+    <p>​     1.:hover(最常用)</p>
+
+    <p>​     2.:focus</p>
+
+    <p>​     3.:checked(多选输入框被勾选的状态)</p>
+
+    <p>​     4.媒体查询(@media screen and(条件){样式})</p>
+
+    <p>​     5.js</p>
+
+    <ul>
+      <li>
+        <p>举例：</p>
+
+        <blockquote>
+          <p><strong>语法：transition : property duration timing-function delay;</strong></p>
+        </blockquote>
+
+        <p>transition:该过渡属性名称  完成动画时间  速度效果曲线  <em>何时开始</em> ;</p>
+
+        <p>transition-delay :</p>
+
+        <blockquote>
+          <p>transition:1s height, 1s width;  //都设置跟没有效果一样，单独设置有不一样的效果</p>
+        </blockquote>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>overflow</strong> 属性规定当内容溢出元素框时发生的事情;</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="text-align: left">值</th>
+          <th style="text-align: left">描述</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align: left">visible</td>
+          <td style="text-align: left">默认值。内容不会被修剪，会呈现在元素框之外。</td>
+        </tr>
+        <tr>
+          <td style="text-align: left">hidden</td>
+          <td style="text-align: left">内容会被修剪，并且其余内容是不可见的。</td>
+        </tr>
+        <tr>
+          <td style="text-align: left">scroll</td>
+          <td style="text-align: left">内容会被修剪，但是浏览器会显示滚动条以便查看其余的内容。</td>
+        </tr>
+        <tr>
+          <td style="text-align: left">auto</td>
+          <td style="text-align: left">如果内容被修剪，则浏览器会显示滚动条以便查看其余的内容。</td>
+        </tr>
+        <tr>
+          <td style="text-align: left">inherit</td>
+          <td style="text-align: left">规定应该从父元素继承 overflow 属性的值。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><strong><em>如果值为 scroll，不论是否需要，用户代理都会提供一种滚动机制。因此，有可能即使元素框中可以放下所有内容也会出现滚动条。</em></strong></p>
+  </li>
+</ol>
+
+:ET

@@ -1,0 +1,586 @@
+I"��<h1 id="数组的扩展">数组的扩展</h1>
+
+<h4 id="1扩展运算符">1.扩展运算符：（<code class="highlighter-rouge">...</code>）</h4>
+
+<p>它好比 rest 参数的逆运算，将一个数组转为用逗号分隔的参数序列。</p>
+
+<p>主要用于函数调用。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function push(array, ...items) {
+  array.push(...items);
+}
+function add(x, y) {
+  return x + y;
+}
+const numbers = [4, 38];
+add(...numbers) // 42
+</code></pre></div></div>
+
+<ul>
+  <li>扩展运算符与正常的函数参数可以结合使用，非常灵活。</li>
+  <li>扩展运算符后面还可以放置表达式。</li>
+  <li>如果扩展运算符后面是一个空数组，则不产生任何效果。</li>
+  <li>只有函数调用时，扩展运算符才可以放在圆括号中，否则会报错。</li>
+</ul>
+
+<h5 id="替代函数的-apply-方法">替代函数的 apply 方法</h5>
+
+<p>应用<code class="highlighter-rouge">Math.max</code>方法，简化求出一个数组最大元素的写法。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// ES5 的写法
+Math.max.apply(null, [14, 3, 77])
+
+// ES6 的写法
+Math.max(...[14, 3, 77])
+
+// 等同于
+Math.max(14, 3, 77);
+</code></pre></div></div>
+
+<p>通过<code class="highlighter-rouge">push</code>函数，将一个数组添加到另一个数组的尾部</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// ES5的 写法
+var arr1 = [0, 1, 2];
+var arr2 = [3, 4, 5];
+Array.prototype.push.apply(arr1, arr2);
+
+// ES6 的写法
+let arr1 = [0, 1, 2];
+let arr2 = [3, 4, 5];
+arr1.push(...arr2);
+</code></pre></div></div>
+
+<h5 id="扩展运算符的应用">扩展运算符的应用</h5>
+
+<p><strong>(1）复制数组:<code class="highlighter-rouge">a1</code>会返回原数组的克隆，再修改<code class="highlighter-rouge">a2</code>就不会对<code class="highlighter-rouge">a1</code>产生影响。</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const a1 = [1, 2];
+// 写法一
+const a2 = [...a1];
+// 写法二
+const [...a2] = a1;
+</code></pre></div></div>
+
+<p><strong>（2）合并数组</strong></p>
+
+<p>concat() 方法用于连接两个或多个数组。</p>
+
+<p>该方法不会改变现有的数组，而仅仅会返回被连接数组的一个副本。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const arr1 = ['a', 'b'];
+const arr2 = ['c'];
+const arr3 = ['d', 'e'];
+
+// ES5 的合并数组
+arr1.concat(arr2, arr3);
+// [ 'a', 'b', 'c', 'd', 'e' ]
+
+// ES6 的合并数组
+[...arr1, ...arr2, ...arr3]
+// [ 'a', 'b', 'c', 'd', 'e' ]
+</code></pre></div></div>
+
+<p><strong>(3）与解构赋值结合</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const [first, ...rest] = [1, 2, 3, 4, 5];
+first // 1
+rest  // [2, 3, 4, 5]
+
+const [first, ...rest] = [];
+first // undefined
+rest  // []
+
+const [first, ...rest] = ["foo"];
+first  // "foo"
+rest   // []
+</code></pre></div></div>
+
+<p>如果将扩展运算符用于数组赋值，只能放在参数的最后一位，否则会报错。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const [...butLast, last] = [1, 2, 3, 4, 5];
+// 报错
+const [first, ...middle, last] = [1, 2, 3, 4, 5];
+// 报错
+</code></pre></div></div>
+
+<p><strong>（4）字符串</strong></p>
+
+<p>扩展运算符还可以将字符串转为真正的数组。</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[...</span><span class="dl">'</span><span class="s1">hello</span><span class="dl">'</span><span class="p">]</span>
+<span class="c1">// [ "h", "e", "l", "l", "o" ]</span>
+</code></pre></div></div>
+
+<p><strong>(5）实现了 Iterator 接口的对象</strong></p>
+
+<p>任何定义了遍历器（Iterator）接口的对象（参阅 Iterator 一章），都可以用扩展运算符转为真正的数组。</p>
+
+<p><strong>（6）Map 和 Set 结构，Generator 函数</strong>可以使用扩展运算符。</p>
+
+<h4 id="2-arrayfrom">2. Array.from()</h4>
+
+<p>用于将两类对象转为真正的数组：类似数组的对象（array-like object）和可遍历（iterable）的对象（包括 ES6 新增的数据结构 Set 和 Map）。</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">arrayLike</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="dl">'</span><span class="s1">0</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">'</span><span class="s1">1</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">,</span>
+    <span class="dl">'</span><span class="s1">2</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">c</span><span class="dl">'</span><span class="p">,</span>
+    <span class="na">length</span><span class="p">:</span> <span class="mi">3</span>
+<span class="p">};</span>
+
+<span class="c1">// ES5的写法</span>
+<span class="kd">var</span> <span class="nx">arr1</span> <span class="o">=</span> <span class="p">[].</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arrayLike</span><span class="p">);</span> <span class="c1">// ['a', 'b', 'c']</span>
+
+<span class="c1">// ES6的写法</span>
+<span class="kd">let</span> <span class="nx">arr2</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">arrayLike</span><span class="p">);</span> <span class="c1">// ['a', 'b', 'c']</span>
+</code></pre></div></div>
+
+<p>如果参数是一个真正的数组，<code class="highlighter-rouge">Array.from</code>会返回一个一模一样的新数组。</p>
+
+<p>扩展运算符（<code class="highlighter-rouge">...</code>）也可以将某些数据结构转为数组。</p>
+
+<p><code class="highlighter-rouge">Array.from</code>还可以接受第二个参数，作用类似于数组的<code class="highlighter-rouge">map</code>方法，用来对每个元素进行处理，将处理后的值放入返回的数组。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Array.from(arrayLike, x =&gt; x * x);
+// 等同于
+Array.from(arrayLike).map(x =&gt; x * x);
+
+Array.from([1, 2, 3], (x) =&gt; x * x)
+// [1, 4, 9]
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">Array.from()</code>可以将各种值转为真正的数组，并且还提供<code class="highlighter-rouge">map</code>功能。这实际上意味着，只要有一个原始的数据结构，你就可以先对它的值进行处理，然后转成规范的数组结构，进而就可以使用数量众多的数组方法。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Array.from({ length: 2 }, () =&gt; 'jack')
+// ['jack', 'jack']
+</code></pre></div></div>
+
+<p>字符串转为数组，然后返回字符串的长度。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function countSymbols(string) {
+  return Array.from(string).length;
+}s
+</code></pre></div></div>
+
+<h4 id="3arrayof-用于将一组值转换为数组">3.Array.of() :用于将一组值，转换为数组。</h4>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">Array</span><span class="p">.</span><span class="k">of</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span> <span class="c1">// [3,11,8]</span>
+<span class="nb">Array</span><span class="p">.</span><span class="k">of</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1">// [3]</span>
+<span class="nb">Array</span><span class="p">.</span><span class="k">of</span><span class="p">(</span><span class="mi">3</span><span class="p">).</span><span class="nx">length</span> <span class="c1">// 1</span>
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>补数组构造函数<code class="highlighter-rouge">Array()</code>的不足。因为参数个数的不同，会导致<code class="highlighter-rouge">Array()</code>的行为有差异。</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">Array.of</code>总是返回参数值组成的数组。如果没有参数，就返回一个空数组。</p>
+  </li>
+</ul>
+
+<h4 id="4数组实例的-copywithin">4.数组实例的 copyWithin()</h4>
+
+<p>数组实例的<code class="highlighter-rouge">copyWithin()</code>方法，在当前数组内部，将指定位置的成员复制到其他位置（会覆盖原有成员），然后返回当前数组。也就是说，使用这个方法，会修改当前数组。</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">rray</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">copyWithin</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">start</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">end</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>它接受三个参数。</p>
+
+<ul>
+  <li>target（必需）：从该位置开始替换数据。如果为负值，表示倒数。</li>
+  <li>start（可选）：从该位置开始读取数据，默认为 0。如果为负值，表示从末尾开始计算。</li>
+  <li>end（可选）：到该位置前停止读取数据，默认等于数组长度。如果为负值，表示从末尾开始计算。</li>
+</ul>
+
+<p>这三个参数都应该是数值，如果不是，会自动转为数值。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// 将3号位复制到0号位
+[1, 2, 3, 4, 5].copyWithin(0, 3, 4)
+// [4, 2, 3, 4, 5]
+
+// -2相当于3号位，-1相当于4号位
+[1, 2, 3, 4, 5].copyWithin(0, -2, -1)
+// [4, 2, 3, 4, 5]
+
+// 将3号位复制到0号位
+[].copyWithin.call({length: 5, 3: 1}, 0, 3)
+// {0: 1, 3: 1, length: 5}
+
+// 将2号位到数组结束，复制到0号位
+let i32a = new Int32Array([1, 2, 3, 4, 5]);
+i32a.copyWithin(0, 2);
+// Int32Array [3, 4, 5, 4, 5]
+
+// 对于没有部署 TypedArray 的 copyWithin 方法的平台
+// 需要采用下面的写法
+[].copyWithin.call(new Int32Array([1, 2, 3, 4, 5]), 0, 3, 4);
+// Int32Array [4, 2, 3, 4, 5]
+</code></pre></div></div>
+
+<h4 id="5数组实例的-find-和-findindex">5.数组实例的 find() 和 findIndex()</h4>
+
+<p><code class="highlighter-rouge">find</code>方法:用于找出第一个符合条件的数组成员。它的参数是一个回调函数，所有数组成员依次执行该回调函数，直到找出第一个返回值为<code class="highlighter-rouge">true</code>的成员，然后返回该成员。如果没有符合条件的成员，则返回<code class="highlighter-rouge">undefined</code>。</p>
+
+<p>找出数组中第一个小于 0 的成员。</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">].</span><span class="nx">find</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="nx">index</span><span class="p">,</span> <span class="nx">arr</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="nx">value</span> <span class="o">&gt;</span> <span class="mi">9</span><span class="p">;</span>
+<span class="p">})</span> <span class="c1">// 10</span>
+</code></pre></div></div>
+
+<p>上面代码中，<code class="highlighter-rouge">find</code>方法的回调函数可以接受三个参数，依次为当前的值、当前的位置和原数组。</p>
+
+<ul>
+  <li>
+    <p>数组实例的<code class="highlighter-rouge">findIndex</code>方法的用法与<code class="highlighter-rouge">find</code>方法非常类似，返回第一个符合条件的数组成员的位置，如果所有成员都不符合条件，则返回<code class="highlighter-rouge">-1</code>。</p>
+  </li>
+  <li>
+    <p>这两个方法都可以接受第二个参数，用来绑定回调函数的<code class="highlighter-rouge">this</code>对象。</p>
+  </li>
+  <li>
+    <p>这两个方法都可以发现<code class="highlighter-rouge">NaN</code>，弥补了数组的<code class="highlighter-rouge">indexOf</code>方法的不足。</p>
+  </li>
+</ul>
+
+<h4 id="6数组实例的-fill">6.数组实例的 fill()</h4>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">*fill</code>方法使用给定值，填充一个数组。</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">fill</code>方法还可以接受第二个和第三个参数，用于指定填充的起始位置和结束位置。</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">c</span><span class="dl">'</span><span class="p">].</span><span class="nx">fill</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="c1">// ['a', 7, 'c']</span>
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h4 id="7数组实例的-entrieskeys-和-values-于遍历数组">7.数组实例的 entries()，keys() 和 values() ——于遍历数组</h4>
+
+<p><strong>可以用<code class="highlighter-rouge">for...of</code>循环进行遍历，唯一的区别是<code class="highlighter-rouge">keys()</code>是对键名的遍历、<code class="highlighter-rouge">values()</code>是对键值的遍历，<code class="highlighter-rouge">entries()</code>是对键值对的遍历。</strong></p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">index</span> <span class="k">of</span> <span class="p">[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">].</span><span class="nx">keys</span><span class="p">())</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">index</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="c1">// 0</span>
+<span class="c1">// 1</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">elem</span> <span class="k">of</span> <span class="p">[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">].</span><span class="nx">values</span><span class="p">())</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">elem</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="c1">// 'a'</span>
+<span class="c1">// 'b'</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="p">[</span><span class="nx">index</span><span class="p">,</span> <span class="nx">elem</span><span class="p">]</span> <span class="k">of</span> <span class="p">[</span><span class="dl">'</span><span class="s1">a</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">b</span><span class="dl">'</span><span class="p">].</span><span class="nx">entries</span><span class="p">())</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">elem</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="c1">// 0 "a"</span>
+<span class="c1">// 1 "b"</span>
+</code></pre></div></div>
+
+<h4 id="8数组实例的-includes">8.数组实例的 includes():</h4>
+
+<h4 id="返回一个布尔值表示某个数组是否包含给定的值与字符串的includes方法类似">返回一个布尔值，表示某个数组是否包含给定的值，与字符串的<code class="highlighter-rouge">includes</code>方法类似。</h4>
+
+<p>第二个参数表示搜索的起始位置，默认为<code class="highlighter-rouge">0</code>。如果第二个参数为负数，则表示倒数的位置，如果这时它大于数组长度（比如第二个参数为<code class="highlighter-rouge">-4</code>，但数组长度为<code class="highlighter-rouge">3</code>），则会重置为从<code class="highlighter-rouge">0</code>开始。</p>
+
+<h4 id="9数组实例的-flatflatmap">9.数组实例的 flat()，flatMap()</h4>
+
+<ul>
+  <li>
+    <p>数组的成员有时还是数组，<code class="highlighter-rouge">Array.prototype.flat()</code>用于将嵌套的数组“拉平”，变成一维的数组。该方法返回一个新数组，对原数据没有影响。</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">flat()</code>默认只会“拉平”一层，如果想要“拉平”多层的嵌套数组，可以将<code class="highlighter-rouge">flat()</code>方法的参数写成一个整数，表示想要拉平的层数，默认为1。</p>
+  </li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]]].</span><span class="nx">flat</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1">// [1, 2, 3, 4, 5]</span>
+</code></pre></div></div>
+
+<ul>
+  <li>如果不管有多少层嵌套，都要转成一维数组，可以用<code class="highlighter-rouge">Infinity</code>关键字作为参数。</li>
+  <li>如果原数组有空位，<code class="highlighter-rouge">flat()</code>方法会跳过空位。</li>
+</ul>
+
+<ol>
+  <li>
+    <p><code class="highlighter-rouge">flatMap()</code>方法对原数组的每个成员执行一个函数（相当于执行<code class="highlighter-rouge">Array.prototype.map()</code>），然后对返回值组成的数组执行<code class="highlighter-rouge">flat()</code>方法。该方法返回一个新数组，不改变原数组。</p>
+  </li>
+  <li><code class="highlighter-rouge">latMap()</code>方法的参数是一个遍历函数，该函数可以接受三个参数，分别是当前数组成员、当前数组成员的位置（从零开始）、原数组。</li>
+  <li><code class="highlighter-rouge">flatMap()</code>方法还可以有第二个参数，用来绑定遍历函数里面的<code class="highlighter-rouge">this</code>。</li>
+</ol>
+
+<h4 id="10数组的空位">10.数组的空位</h4>
+
+<p>空位不是<code class="highlighter-rouge">undefined</code>，一个位置的值等于<code class="highlighter-rouge">undefined</code>，依然是有值的。空位是没有任何值</p>
+
+<ul>
+  <li><code class="highlighter-rouge">forEach()</code>, <code class="highlighter-rouge">filter()</code>, <code class="highlighter-rouge">reduce()</code>, <code class="highlighter-rouge">every()</code> 和<code class="highlighter-rouge">some()</code>都会跳过空位。</li>
+  <li><code class="highlighter-rouge">map()</code>会跳过空位，但会保留这个值</li>
+  <li><code class="highlighter-rouge">join()</code>和<code class="highlighter-rouge">toString()</code>会将空位视为<code class="highlighter-rouge">undefined</code>，而<code class="highlighter-rouge">undefined</code>和<code class="highlighter-rouge">null</code>会被处理成空字符串。</li>
+</ul>
+
+<hr />
+
+<h1 id="对象的扩展">对象的扩展</h1>
+
+<h4 id="1属性的简洁表示法">1.属性的简洁表示法</h4>
+
+<p>允许在大括号里面，直接写入变量和函数，作为对象的属性和方法;</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">foo</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">bar</span><span class="dl">'</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">baz</span> <span class="o">=</span> <span class="p">{</span><span class="nx">foo</span><span class="p">};</span>
+<span class="nx">baz</span> <span class="c1">// {foo: "bar"}</span>
+
+<span class="c1">// 等同于</span>
+<span class="kd">const</span> <span class="nx">baz</span> <span class="o">=</span> <span class="p">{</span><span class="na">foo</span><span class="p">:</span> <span class="nx">foo</span><span class="p">};</span>
+</code></pre></div></div>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">user</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">name</span><span class="p">:</span> <span class="dl">'</span><span class="s1">test</span><span class="dl">'</span>
+<span class="p">};</span>
+<span class="kd">let</span> <span class="nx">foo</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="na">bar</span><span class="p">:</span> <span class="dl">'</span><span class="s1">baz</span><span class="dl">'</span>
+<span class="p">};</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">user</span><span class="p">,</span> <span class="nx">foo</span><span class="p">)</span>
+<span class="c1">// {name: "test"} {bar: "baz"}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">({</span><span class="nx">user</span><span class="p">,</span> <span class="nx">foo</span><span class="p">})</span>
+<span class="c1">// {user: {name: "test"}, foo: {bar: "baz"}}</span>
+</code></pre></div></div>
+
+<h4 id="2属性名表达式">2.属性名表达式</h4>
+
+<p>定义对象的属性:</p>
+
+<ul>
+  <li>
+    <p>方法一是直接用标识符作为属性名;</p>
+  </li>
+  <li>
+    <p>方法二是用表达式作为属性名，这时要将表达式放在方括号之内。</p>
+  </li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">et</span> <span class="nx">lastWord</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">last word</span><span class="dl">'</span><span class="p">;</span>
+
+<span class="kd">const</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="dl">'</span><span class="s1">first word</span><span class="dl">'</span><span class="p">:</span> <span class="dl">'</span><span class="s1">hello</span><span class="dl">'</span><span class="p">,</span>
+  <span class="p">[</span><span class="nx">lastWord</span><span class="p">]:</span> <span class="dl">'</span><span class="s1">world</span><span class="dl">'</span>
+<span class="p">};</span>
+
+<span class="nx">a</span><span class="p">[</span><span class="dl">'</span><span class="s1">first word</span><span class="dl">'</span><span class="p">]</span> <span class="c1">// "hello"</span>
+<span class="nx">a</span><span class="p">[</span><span class="nx">lastWord</span><span class="p">]</span> <span class="c1">// "world"</span>
+<span class="nx">a</span><span class="p">[</span><span class="dl">'</span><span class="s1">last word</span><span class="dl">'</span><span class="p">]</span> <span class="c1">// "world"</span>
+</code></pre></div></div>
+
+<p>属性名表达式与简洁表示法，不能同时使用，会报错。</p>
+
+<h4 id="3方法的-name-属性">3.方法的 name 属性</h4>
+
+<p>函数的<code class="highlighter-rouge">name</code>属性，返回函数名。对象方法也是函数，因此也有<code class="highlighter-rouge">name</code>属性。</p>
+
+<p>如果对象的方法使用了取值函数（<code class="highlighter-rouge">getter</code>）和存值函数（<code class="highlighter-rouge">setter</code>），则<code class="highlighter-rouge">name</code>属性不是在该方法上面，而是该方法的属性的描述对象的<code class="highlighter-rouge">get</code>和<code class="highlighter-rouge">set</code>属性上面，返回值是方法名前加上<code class="highlighter-rouge">get</code>和<code class="highlighter-rouge">set</code>。</p>
+
+<h4 id="4属性的可枚举性和遍历">4.属性的可枚举性和遍历</h4>
+
+<ol>
+  <li>可枚举性</li>
+</ol>
+
+<ul>
+  <li>对象的每个属性都有一个描述对象（Descriptor），用来控制该属性的行为。<code class="highlighter-rouge">Object.getOwnPropertyDescriptor</code>方法可以获取该属性的描述对象。描述对象的<code class="highlighter-rouge">enumerable</code>属性，称为“可枚举性”，如果该属性为<code class="highlighter-rouge">false</code>，就表示某些操作会忽略当前属性。</li>
+  <li>所有 Class 的原型的方法都是不可枚举的。</li>
+</ul>
+
+<ol>
+  <li>
+    <p>属性的遍历</p>
+
+    <p><strong>1）for…in</strong></p>
+
+    <p><code class="highlighter-rouge">for...in</code>循环遍历对象自身的和继承的可枚举属性（不含 Symbol 属性）。</p>
+
+    <p><strong>（2）Object.keys(obj)</strong></p>
+
+    <p><code class="highlighter-rouge">Object.keys</code>返回一个数组，包括对象自身的（不含继承的）所有可枚举属性（不含 Symbol 属性）的键名。</p>
+
+    <p><strong>（3）Object.getOwnPropertyNames(obj)</strong></p>
+
+    <p><code class="highlighter-rouge">Object.getOwnPropertyNames</code>返回一个数组，包含对象自身的所有属性（不含 Symbol 属性，但是包括不可枚举属性）的键名。</p>
+
+    <p><strong>（4）Object.getOwnPropertySymbols(obj)</strong></p>
+
+    <p><code class="highlighter-rouge">Object.getOwnPropertySymbols</code>返回一个数组，包含对象自身的所有 Symbol 属性的键名。</p>
+
+    <p><strong>（5）Reflect.ownKeys(obj)</strong></p>
+
+    <p><code class="highlighter-rouge">Reflect.ownKeys</code>返回一个数组，包含对象自身的所有键名，不管键名是 Symbol 或字符串，也不管是否可枚举。</p>
+
+    <p>以上的 5 种方法遍历对象的键名，都遵守同样的属性遍历的次序规则。</p>
+
+    <ul>
+      <li>首先遍历所有数值键，按照数值升序排列。</li>
+      <li>其次遍历所有字符串键，按照加入时间升序排列。</li>
+      <li>最后遍历所有 Symbol 键，按照加入时间升序排列。</li>
+    </ul>
+  </li>
+</ol>
+
+<h4 id="5super关键字">5.super关键字</h4>
+
+<p><code class="highlighter-rouge">this</code>关键字总是指向函数所在的当前对象，关键字<code class="highlighter-rouge">super</code>，指向当前对象的原型对象。</p>
+
+<h5 id="6对象的扩展运算符">6.对象的扩展运算符</h5>
+
+<p>对象的解构赋值用于从一个对象取值，相当于将目标对象自身的所有可遍历的（enumerable）、但尚未被读取的属性，分配到指定的对象上面。所有的键和它们的值，都会拷贝到新对象上面。</p>
+
+<ul>
+  <li>
+    <p>解构赋值要求等号右边是一个对象；</p>
+  </li>
+  <li>
+    <p>解构赋值的拷贝是浅拷贝，即如果一个键的值是复合类型的值（数组、对象、函数）、那么解构赋值拷贝的是这个值的引用，而不是这个值的副本。</p>
+  </li>
+  <li>
+    <p>扩展运算符的解构赋值，不能复制继承自原型对象的属性。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>let o1 = { a: 1 };
+let o2 = { b: 2 };
+o2.__proto__ = o1;
+let { ...o3 } = o2;
+o3 // { b: 2 }
+o3.a // undefined    对象o3复制了o2，但是只复制了o2自身的属性，没有复制它的原型对象o1的属性。
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>变量声明语句之中，如果使用解构赋值，扩展运算符后面必须是一个变量名，而不能是一个解构赋值表达式，所以上面代码引入了中间变量<code class="highlighter-rouge">newObj</code></p>
+  </li>
+  <li>
+    <p>解构赋值的一个用处，是扩展某个函数的参数，引入其他操作。</p>
+  </li>
+</ul>
+
+<p>####　扩展运算符 ：对象的扩展运算符（<code class="highlighter-rouge">...</code>）用于取出参数对象的所有可遍历属性，拷贝到当前对象之中。</p>
+
+<p><code class="highlighter-rouge">Object.assign()</code> 方法用于将所有可枚举属性的值从一个或多个源对象复制到目标对象。它将返回目标对象。</p>
+
+<hr />
+
+<h1 id="对象的新增方法">对象的新增方法</h1>
+
+<h4 id="1objectis比较两个值是否严格相等与严格比较运算符的行为基本一致">1.Object.is():比较两个值是否严格相等，与严格比较运算符（===）的行为基本一致。</h4>
+
+<h4 id="2objectassign用于对象的合并将源对象source的所有可枚举属性复制到目标对象target">2.Object.assign()用于对象的合并，将源对象（source）的所有可枚举属性，复制到目标对象（target）。</h4>
+
+<ul>
+  <li>
+    <p><strong>（1）浅拷贝</strong></p>
+
+    <p><code class="highlighter-rouge">Object.assign</code>方法实行的是浅拷贝，而不是深拷贝。也就是说，如果源对象某个属性的值是对象，那么目标对象拷贝得到的是这个对象的引用。</p>
+  </li>
+  <li>
+    <p><strong>（2）同名属性的替换</strong></p>
+
+    <p>对于这种嵌套的对象，一旦遇到同名属性，<code class="highlighter-rouge">Object.assign</code>的处理方法是替换，而不是添加。</p>
+  </li>
+  <li>
+    <p><strong>3）数组的处理</strong></p>
+
+    <p><code class="highlighter-rouge">Object.assign</code>可以用来处理数组，但是会把数组视为对象。</p>
+  </li>
+  <li>
+    <p><strong>4）取值函数的处理</strong></p>
+
+    <p><code class="highlighter-rouge">Object.assign</code>只能进行值的复制，如果要复制的值是一个取值函数，那么将求值后再复制。</p>
+
+    <p>常见用途：</p>
+
+    <ul>
+      <li><strong>（1）为对象添加属性</strong></li>
+      <li><strong>（2）为对象添加方法</strong></li>
+      <li><strong>（3）克隆对象</strong></li>
+      <li><strong>（4）合并多个对象</strong></li>
+      <li><strong>（5）为属性指定默认值</strong></li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="3objectgetownpropertydescriptors返回指定对象所有自身属性非继承属性的描述对象">3.Object.getOwnPropertyDescriptors():返回指定对象所有自身属性（非继承属性）的描述对象。</h4>
+
+<h4 id="4-__proto__属性objectsetprototypeofobjectgetprototypeof">4. __proto__属性，Object.setPrototypeOf()，Object.getPrototypeOf()</h4>
+
+<ul>
+  <li>
+    <p>_proto_属性:<code class="highlighter-rouge">__proto__</code>属性（前后各两个下划线），用来读取或设置当前对象的<code class="highlighter-rouge">prototype</code>对象</p>
+  </li>
+  <li><code class="highlighter-rouge">Object.setPrototypeOf</code>方法的作用与<code class="highlighter-rouge">__proto__</code>相同，用来设置一个对象的<code class="highlighter-rouge">prototype</code>对象，返回参数对象本身。</li>
+  <li>Object.getPrototypeOf()用于读取一个对象的原型对象。</li>
+</ul>
+
+<h4 id="5objectkeysobjectvaluesobjectentries">5.Object.keys()，Object.values()，Object.entries()</h4>
+
+<ul>
+  <li><code class="highlighter-rouge">Object.keys</code>方法，返回一个数组，成员是参数对象自身的（不含继承的）所有可遍历（enumerable）属性的键名。</li>
+  <li><code class="highlighter-rouge">Object.values</code>方法返回一个数组，成员是参数对象自身的（不含继承的）所有可遍历（enumerable）属性的键值。</li>
+  <li><code class="highlighter-rouge">Object.entries()</code>方法返回一个数组，成员是参数对象自身的（不含继承的）所有可遍历（enumerable）属性的键值对数组。</li>
+</ul>
+
+<h4 id="6objectfromentries方法是objectentries的逆操作用于将一个键值对数组转为对象">6.<code class="highlighter-rouge">Object.fromEntries()</code>方法是<code class="highlighter-rouge">Object.entries()</code>的逆操作，用于将一个键值对数组转为对象。</h4>
+
+<hr />
+
+<p>#　async函数</p>
+
+<h2 id="１含义">１含义</h2>
+
+<p>它就是 Generator 函数的语法糖。</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">'</span><span class="s1">fs</span><span class="dl">'</span><span class="p">);</span>
+
+<span class="kd">const</span> <span class="nx">readFile</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">fileName</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="k">new</span> <span class="nb">Promise</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">fileName</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="k">return</span> <span class="nx">reject</span><span class="p">(</span><span class="nx">error</span><span class="p">);</span>
+      <span class="nx">resolve</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+    <span class="p">});</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+
+<span class="kd">const</span> <span class="nx">gen</span> <span class="o">=</span> <span class="kd">function</span><span class="o">*</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">f1</span> <span class="o">=</span> <span class="k">yield</span> <span class="nx">readFile</span><span class="p">(</span><span class="dl">'</span><span class="s1">/etc/fstab</span><span class="dl">'</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">f2</span> <span class="o">=</span> <span class="k">yield</span> <span class="nx">readFile</span><span class="p">(</span><span class="dl">'</span><span class="s1">/etc/shells</span><span class="dl">'</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">f1</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">f2</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>上面代码的函数<code class="highlighter-rouge">gen</code>可以写成<code class="highlighter-rouge">async</code>函数，就是下面这样。</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">asyncReadFile</span> <span class="o">=</span> <span class="k">async</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">f1</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">readFile</span><span class="p">(</span><span class="dl">'</span><span class="s1">/etc/fstab</span><span class="dl">'</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">f2</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">readFile</span><span class="p">(</span><span class="dl">'</span><span class="s1">/etc/shells</span><span class="dl">'</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">f1</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">f2</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>async函数对 Generator 函数的改进：</p>
+
+<p>（1）内置执行器。</p>
+
+<p>（2）更好的语义。</p>
+
+<p>3）更广的适用性。<code class="highlighter-rouge">async</code>函数的<code class="highlighter-rouge">await</code>命令后面，可以是 Promise 对象和原始类型的值（数值、字符串和布尔值，但这时会自动转成立即 resolved 的 Promise 对象）。</p>
+
+<p>（4）返回值是 Promise。</p>
+
+<h2 id="２基本用法">２．基本用法</h2>
+
+<p><code class="highlighter-rouge">async</code>函数返回一个 Promise 对象，可以使用<code class="highlighter-rouge">then</code>方法添加回调函数。当函数执行的时候，一旦遇到<code class="highlighter-rouge">await</code>就会先返回，等到异步操作完成，再接着执行函数体内后面的语句。</p>
+
+:ET

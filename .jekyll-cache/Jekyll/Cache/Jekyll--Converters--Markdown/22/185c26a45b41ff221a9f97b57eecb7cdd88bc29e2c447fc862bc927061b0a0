@@ -1,0 +1,404 @@
+I"56<h1 id="sass-快速入门">Sass 快速入门</h1>
+
+<h2 id="一变量">一．变量</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">$</code>　符号来标识变量；</li>
+  <li>将CSS属性值定义成变量；</li>
+</ul>
+
+<ol>
+  <li>
+    <p>变量的声明：</p>
+
+    <ul>
+      <li><code class="highlighter-rouge">$</code>变量名：变量值；<code class="highlighter-rouge">$nav-color: #F90;</code></li>
+      <li>变量定义在规则快内，值能在规则块内使用：例如<code class="highlighter-rouge">$width</code>；</li>
+      <li><code class="highlighter-rouge">$nav-color</code>这个变量定义在了规则块外边，所以在这个样式表中都可以像 <code class="highlighter-rouge">nav</code>规则块那样引用它。</li>
+    </ul>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$nav-color: #F90;
+nav {
+  $width: 100px;
+  width: $width;//只能在块内使用
+  color: $nav-color;
+}
+//编译后
+nav {
+  width: 100px;
+  color: #F90;
+}
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>变量引用</p>
+
+    <ul>
+      <li>
+        <p>当需要改变一个不同的值时，只需要改变这个变量的值，则所有引用此变量的地方生成的值都会随之改变。</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$highlight-color: #F90;
+$highlight-border: 1px solid $highlight-color;//变量引用
+.selected {
+  border: $highlight-border;//变量引用
+}
+//编译后
+.selected {
+  border: 1px solid #F90;
+}
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>变量命名：</p>
+
+    <ul>
+      <li>下划线和中划线互相兼容；</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="二嵌套css规则">二．嵌套CSS规则</h2>
+
+<ol>
+  <li>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//当多级嵌套时，使用ｓａｓｓ可以简化
+#content {
+  article {
+    h1 { color: #333 }
+    p { margin-bottom: 1.4em }
+  }
+  aside { background-color: #EEE }
+}
+ /* 编译后 */
+#content article h1 { color: #333 }
+#content article p { margin-bottom: 1.4em }
+#content aside { background-color: #EEE }
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//一个给定的规则块，既可以像普通的CSS那样包含属性，又可以嵌套其他规则块。
+#content {
+  background-color: #f5f5f5;
+  aside { background-color: #eee }
+}
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>父选择器的标识符<code class="highlighter-rouge">&amp;</code>;</p>
+
+    <p><strong><em>当需要给超链接ａ 添加一个伪类时；</em></strong></p>
+
+    <p><strong>1. 当包含父选择器标识符的嵌套规则被打开时，它不会像后代选择器那样进行拼接，而是<code class="highlighter-rouge">&amp;</code>被父选择器直接替换：</strong></p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>article a {
+  color: blue;
+  &amp;:hover { color: red }
+}
+//编译后
+article a { color: blue }
+article a:hover { color: red }
+</code></pre></div>    </div>
+
+    <p>**2. 在父选择器之前添加选择器 **</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#content aside {
+  color: red;
+  body.ie &amp; { color: green }
+}
+/*编译后*/
+#content aside {color: red};
+body.ie #content aside { color: green }
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>群组选择器的嵌套</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.container {
+  h1, h2, h3 {margin-bottom: .8em}
+}
+//编译后
+.container h1, .container h2, .container h3 { margin-bottom: .8em }
+</code></pre></div>    </div>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nav, aside {
+  a {color: blue}
+}
+//编译后
+nav a, aside a {color: blue}
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>子组合选择器和同层组合选择器：&gt;、+和~；</p>
+
+    <ul>
+      <li>子组合选择器 :<code class="highlighter-rouge">&gt;</code>     选择一个元素的直接子元素;</li>
+      <li>子组合选择器 :<code class="highlighter-rouge"> 空格</code>　选择一个元素子孙元素;</li>
+      <li>同层相邻组合选择器:<code class="highlighter-rouge">+</code>     选择<code class="highlighter-rouge">header</code>元素后紧跟的<code class="highlighter-rouge">p</code>元素：</li>
+      <li>同层全体组合选择器: <code class="highlighter-rouge">~</code>   选择所有跟在<code class="highlighter-rouge">article</code>后的同层<code class="highlighter-rouge">article</code>元素，不管它们之间隔了多少其他元素：</li>
+    </ul>
+  </li>
+  <li>
+    <p>嵌套属性</p>
+
+    <p><strong>嵌套属性的规则是这样的：把属性名从中划线-的地方断开，在根属性后边添加一个冒号:，紧跟一个<code class="highlighter-rouge">{ }</code>块，把子属性部分写在这个<code class="highlighter-rouge">{ }</code>块中。</strong></p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nav {
+  border: {
+  style: solid;
+  width: 1px;
+  color: #ccc;
+  }
+}
+//编译后
+nav {
+  border-style: solid;
+  border-width: 1px;
+  border-color: #ccc;
+}
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<h2 id="三导入sass文件--import">三．导入SASS文件  –@import</h2>
+
+<ol>
+  <li>
+    <p>需要导入一个sass文件时，使用<code class="highlighter-rouge">@import</code> 文件名;</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">sass</code>局部文件的文件名以下划线开头时，这样，<code class="highlighter-rouge">sass</code>就不会在编译时单独编译这个文件输出<code class="highlighter-rouge">css</code>，而只把这个文件用作导入。</p>
+  </li>
+  <li>
+    <p>默认变量值：</p>
+
+    <ol>
+      <li>
+        <p>反复声明一个变量，只有最后一处声明有效且它会覆盖前边的值；</p>
+      </li>
+      <li>
+        <p>通过<code class="highlighter-rouge">!default</code>:含义是：如果这个变量被声明赋值了，那就用它声明的值，否则就用这个默认值;</p>
+      </li>
+      <li>
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$fancybox-width: 400px !default;
+.fancybox {
+width: $fancybox-width;
+}
+      
+//如果用户在导入你的sass局部文件之前声明了一个$fancybox-width变量，那么你的局部文件中对$fancybox-width赋值400px的操作就无效。如果用户没有做这样的声明，则$fancybox-width将默认为400px。
+</code></pre></div>        </div>
+      </li>
+    </ol>
+  </li>
+  <li>
+    <p>嵌套导入：</p>
+
+    <p><code class="highlighter-rouge">sass</code>允许<code class="highlighter-rouge">@import</code>命令写在<code class="highlighter-rouge">css</code>规则内。这种导入方式下，生成对应的<code class="highlighter-rouge">css</code>文件时，局部文件会被直接插入到<code class="highlighter-rouge">css</code>规则内导入它的地方。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>.blue-theme {@import "blue-theme"}
+   
+//生成的结果跟你直接在.blue-theme选择器内写_blue-theme.scss文件的内容完全一样。
+   
+.blue-theme {
+  aside {
+    background: blue;
+    color: #fff;
+  }
+}
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>原生的CSS导入</p>
+
+    <p>不能用<code class="highlighter-rouge">sass</code>的<code class="highlighter-rouge">@import</code>直接导入一个原始的<code class="highlighter-rouge">css</code>文件，因为<code class="highlighter-rouge">sass</code>的语法完全兼容<code class="highlighter-rouge">css</code>，所以你可以把原始的<code class="highlighter-rouge">css</code>文件改名为<code class="highlighter-rouge">.scss</code>后缀，即可直接导入了。</p>
+
+    <p><em>下列三种情况下会生成原生的<code class="highlighter-rouge">CSS@import</code>，尽管这会造成浏览器解析<code class="highlighter-rouge">css</code>时的额外下载：</em></p>
+
+    <ul>
+      <li>被导入文件的名字以<code class="highlighter-rouge">.css</code>结尾；</li>
+      <li>被导入文件的名字是一个URL地址（比如http://www.sass.hk/css/css.css），由此可用谷歌字体API提供的相应服务；</li>
+      <li>被导入文件的名字是<code class="highlighter-rouge">CSS</code>的url()值。</li>
+    </ul>
+
+    <h2 id="四静默注释">四．静默注释</h2>
+
+    <ul>
+      <li>/<em>……</em>/</li>
+      <li>//</li>
+    </ul>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>body {
+  color /* 这块注释内容不会出现在生成的css中 */: #333;
+  padding: 1; /* 这块注释内容也不会出现在生成的css中 */ 0;
+}
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<h2 id="五混合器mixininclude使用">五．混合器－－@mixin　－－@include使用</h2>
+
+<ol>
+  <li>混合器的使用：</li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//添加一个圆角边框
+@mixin rounded-corners {
+  border-radius: 5px;
+}
+notice {
+  background-color: green;
+  border: 2px solid #00aa00;
+  @include rounded-corners;／／使用上述混合器
+}
+//sass最终生成：
+.notice {
+  background-color: green;
+  border: 2px solid #00aa00;
+　//引入了混合器内容
+  border-radius: 5px;
+}
+</code></pre></div></div>
+
+<ol>
+  <li>
+    <p>混合器中的css规则:</p>
+
+    <p>混合器中不仅可以包含属性，也可以包含<code class="highlighter-rouge">css</code>规则，包含选择器和选择器中的属性，如下代码:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@mixin no-bullets {
+  list-style: none;
+  li {
+    list-style-image: none;
+    list-style-type: none;
+    margin-left: 0px;
+  }
+}
+ul.plain {
+  color: #444;
+  @include no-bullets;
+}
+//编译后
+ul.plain {
+  color: #444;
+  list-style: none;
+}
+ul.plain li {
+  list-style-image: none;
+  list-style-type: none;
+  margin-left: 0px;
+}
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>混合器传参</p>
+
+    <ul>
+      <li>通过在<code class="highlighter-rouge">@include</code>混合器时给混合器传参，来定制混合器生成的精确样式。</li>
+    </ul>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@mixin link-colors($normal, $hover, $visited) {
+  color: $normal;
+  &amp;:hover { color: $hover; }
+  &amp;:visited { color: $visited; }
+}
+//混合器被@include时，你可以把它当作一个css函数来传参
+a {
+  @include link-colors(blue, red, green);
+}
+   
+//Sass最终生成的是：
+a { color: blue; }
+a:hover { color: red; }
+a:visited { color: green; }
+</code></pre></div>    </div>
+
+    <ol>
+      <li>只传部分参数时:默认参数值;</li>
+    </ol>
+
+    <p>为了在<code class="highlighter-rouge">@include</code>混合器时不必传入所有的参数，我们可以给参数指定一个默认值。参数默认值使用<code class="highlighter-rouge">$name: default-value</code>的声明形式，默认值可以是任何有效的<code class="highlighter-rouge">css</code>属性值，甚至是其他参数的引用</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@mixin link-colors(
+    $normal,
+    $hover: $normal,
+    $visited: $normal
+  )
+{
+  color: $normal;
+  &amp;:hover { color: $hover; }
+  &amp;:visited { color: $visited; }
+}
+</code></pre></div>    </div>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>调用
+@include link-colors(red)  所有值都为red
+</code></pre></div>    </div>
+
+    <h2 id="六继承extend">六.继承–@extend</h2>
+
+    <ol>
+      <li>继承类及类下的元素的样式;</li>
+    </ol>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//通过选择器继承继承样式
+.error {
+  border: 1px solid red;
+  background-color: #fdd;
+}
+.seriousError {
+  @extend .error;//继承后,包含样式error中所有样式基础上增肌;
+  border-width: 3px;
+}
+</code></pre></div>    </div>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//.seriousError从.error继承样式
+.error a{  //应用到.seriousError a
+  color: red;
+  font-weight: 100;
+}
+h1.error { //应用到hl.seriousError
+  font-size: 1.2rem;
+}
+</code></pre></div>    </div>
+
+    <ol>
+      <li>继承使用情况:
+        <ul>
+          <li>继承是基于类的（有时是基于其他类型的选择器），所以继承应该是建立在语义化的关系上;</li>
+          <li>当一个元素拥有的类（比如说<code class="highlighter-rouge">.seriousError</code>）表明它属于另一个类（比如说<code class="highlighter-rouge">.error</code>），这时使用继承再合适不过了。</li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<hr />
+
+<h2 id="七for循环">七.for循环</h2>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">@for $var from &lt;start&gt; through &lt;end&gt;</code>，</p>
+  </li>
+  <li>
+    <p>@for $var from <start> to <end></end></start></p>
+  </li>
+  <li>
+    <p>*当使用 through 时，条件范围包含 <start> 与 <end> 的值，而使用 to 时条件范围只包含 <start> 的值不包含 <end> 的值*。</end></start></end></start></p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@for $i from 1 through 3 {
+  .item-#{$i} { width: 2em * $i; } 
+}
+//编译后
+.item-1 {
+  width: 2em; }
+.item-2 {
+  width: 4em; }
+.item-3 {
+  width: 6em; }
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+:ET

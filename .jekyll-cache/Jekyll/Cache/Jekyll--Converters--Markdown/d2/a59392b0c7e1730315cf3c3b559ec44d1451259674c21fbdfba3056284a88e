@@ -1,0 +1,356 @@
+I"-4<h1 id="nodejs">NodeJs</h1>
+
+<h4 id="安装配置环境">安装配置环境</h4>
+
+<h4 id="编写nodejs代码">编写NodeJs代码</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'use strict';
+
+console.log('Hello, world.');//保存文件为.js格式
+</code></pre></div></div>
+
+<ul>
+  <li><strong>注意：</strong>第一行总是写上<code class="highlighter-rouge">'use strict';</code>是因为我们总是以严格模式运行JavaScript代码，避免各种潜在陷阱。</li>
+</ul>
+
+<h3 id="commonjs规范">CommonJS规范</h3>
+
+<p>一种模块加载机制。在这个规范下，每个<code class="highlighter-rouge">.js</code>文件都是一个模块，它们内部各自使用的变量名和函数名都互不冲突，例如，<code class="highlighter-rouge">hello.js</code>和<code class="highlighter-rouge">main.js</code>都可以申明全局变量<code class="highlighter-rouge">var s = 'xxx'</code>，且互不影响。</p>
+
+<h3 id="变量的输出和引入">变量的输出和引入</h3>
+
+<p>要在模块中对外输出变量，用：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module.exports = variable；
+</code></pre></div></div>
+
+<p><strong>输出的变量可以是任意对象、函数、数组等等。</strong></p>
+
+<p>要引入其他模块输出的对象，用：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var foo = require('other_module');
+</code></pre></div></div>
+
+<p>引入的对象具体是什么，取决于引入模块输出的对象。</p>
+
+<h3 id="两种方法可以在一个模块中输出变量">两种方法可以在一个模块中输出变量：</h3>
+
+<ul>
+  <li>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// hello.js
+function hello() {
+    console.log('Hello, world!');
+}
+function greet(name) {
+    console.log('Hello, ' + name + '!');
+}
+方法一：对module.exports赋值：
+module.exports={greet,hello}
+module.exports = {
+    hello: hello,
+    greet: greet
+};
+//方法二：直接使用exports：
+exports.hello = hello;
+exports.greet = greet;
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>原因分析：默认情况下，Node准备的exports变量和module.exports变量实际上是同一个变量，并且初始化为空对象{}，于是，我们可以写：</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>exports.foo = function () { return 'foo'; };
+exports.bar = function () { return 'bar'; };
+或者－－－－－》
+module.exports.foo = function () { return 'foo'; };
+module.exports.bar = function () { return 'bar'; };
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>如果我们要输出的是一个函数或数组，那么，只能给<code class="highlighter-rouge">module.exports</code>赋值：</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module.exports = function () { return 'foo'; };
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h2 id="基本模块">基本模块</h2>
+
+<ol>
+  <li>
+    <p><strong>global</strong>: Node.js环境中的全局对象；<code class="highlighter-rouge">&gt;global.console</code></p>
+  </li>
+  <li>
+    <p><strong>process</strong>:Node.js提供的一个对象，它代表当前Node.js进程:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt; process === global.process;
+	true
+&gt; process.version;
+	'v5.2.0'
+&gt; process.platform;
+	'darwin'
+&gt; process.arch;
+	'x64'
+&gt; process.cwd(); //返回当前工作目录
+	'/Users/michael'
+&gt; process.chdir('/private/tmp'); // 切换当前工作目录
+	undefined
+&gt; process.cwd();
+	'/private/tmp'
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>JavaScript程序是由事件驱动执行的单线程模型，Node.js也不例外。Node.js不断执行响应事件的JavaScript函数，直到没有任何响应事件的函数可以执行时，Node.js就退出了。</p>
+
+    <ul>
+      <li>
+        <p>如果我们想要在下一次事件响应中执行代码，可以调用<code class="highlighter-rouge">process.nextTick()</code>：</p>
+      </li>
+      <li>
+        <p>如果我们响应<code class="highlighter-rouge">exit</code>事件，就可以在程序即将退出时执行某个回调函数：</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//process.nextTick()将在下一轮事件循环中调用；
+process.nextTick(function(){
+    console.log('nextTick callback!');
+});
+console.log('nextTick was set!');
+//程序即将退出时的回调函数
+process.on('exit',function(code){
+    console.log('about to exit with code'+code);
+});
+</code></pre></div>        </div>
+
+        <ul>
+          <li>打印结果：</li>
+        </ul>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>lixuehe@lixuehe-ThinkPad-T420:~/workspace/NodeJs-01$ node test.js
+    nextTick was set!
+    nextTick callback!
+    about to exit with code0
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>判断JavaScript代码到底是在什么环境下执行的，<strong><em>常用的方式就是根据浏览器和Node环境提供的全局变量名称来判断：</em></strong></p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>if (typeof(window) === 'undefined') {
+    console.log('node.js');
+} else {
+    console.log('browser');
+}
+</code></pre></div>    </div>
+
+    <h2 id="常用内置模块">常用内置模块</h2>
+
+    <h3 id="fs文件系统模块负责读写文件">fs:文件系统模块，负责读写文件</h3>
+  </li>
+</ol>
+
+<hr />
+
+<p>###　文件读取</p>
+
+<p>#### –异步文件读取</p>
+
+<p><code class="highlighter-rouge">fs.readFile()</code>(参数：文件名，编码格式(选)，回调函数)</p>
+
+<p><strong>Node.js标准的回调函数：第一个参数代表错误信息，第二个参数代表结果</strong></p>
+
+<ol>
+  <li>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'use strict';
+//读取一个text　文件的内容
+var fs = require('fs');　
+//必须要传入编码格式：utf-8
+fs.readFile('sample.txt', 'utf-8', function (err, data) {
+    if (err) {
+        console.log(err);
+    } else {
+        console.log(data);
+    }
+});
+当正常读取时，err参数为null，data参数为读取到的String。当读取发生错误时，err参数代表一个错误对象，data为undefined；
+      
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'use strict';
+//读取一个图片文件
+var fs = require('fs');
+//不需要传入编码格式
+fs.readFile('sample.png', function (err, data) {
+    if (err) {
+        console.log(err);
+    } else {
+        console.log(data);
+        console.log(data.length + ' bytes');
+    }
+});
+回调函数的data参数将返回一个Buffer对象。在Node.js中，Buffer对象就是一个包含零个或任意个字节的数组（注意和Array不同）
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>Buffer</strong>对象和<strong>String</strong>转换:</p>
+
+    <ul>
+      <li>
+        <p>Buffer–&gt;String</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var text = data.toString('utf-8');
+console.log(text);
+</code></pre></div>        </div>
+      </li>
+      <li>
+        <p>String–&gt;Buffer</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var buf = Buffer.from(text, 'utf-8');
+console.log(buf);
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<p>#### –同步文件读取</p>
+
+<p><strong><em>同步读取的函数和异步函数相比，多了一个<code class="highlighter-rouge">Sync</code>后缀，并且不接收回调函数，函数直接返回结果。</em></strong></p>
+
+<ol>
+  <li>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'use strict';
+//同步读取一个文本文件的代码
+var fs = require('fs');
+var data = fs.readFileSync('sample.txt', 'utf-8');
+console.log(data);
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>如果同步读取文件发生错误，则需要用<code class="highlighter-rouge">try...catch</code>捕获该错误：</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>try {
+    var data = fs.readFileSync('sample.txt', 'utf-8');
+    console.log(data);
+} catch (err) {
+    // 出错了
+}
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<hr />
+
+<p>### 文件写入</p>
+
+<p><strong>通过<code class="highlighter-rouge">fs.writeFile()</code>实现的：<code class="highlighter-rouge">writeFile()</code>的参数依次为文件名、数据和回调函数。</strong></p>
+
+<ol>
+  <li>如果传入的数据是String，默认按UTF-8编码写入文本文件;</li>
+  <li>如果传入的参数是<code class="highlighter-rouge">Buffer</code>，则写入的是二进制文件;</li>
+  <li>回调函数由于只关心成功与否，因此只需要一个<code class="highlighter-rouge">err</code>参数；</li>
+  <li>当文件不存在时，或先自动创建；</li>
+  <li>重复写入，内容会被刷新覆盖；</li>
+</ol>
+
+<p>案例：</p>
+
+<ol>
+  <li>异步文件写入</li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  ```
+  'use strict';
+  //将Hello,Node,js　写入outout,txt这个为文本文件中，文件没有先创建；
+  var fs = require('fs');
+  var data = 'Hello, Node.js';
+  fs.writeFile('output.txt', data, function (err) {
+      if (err) {
+          console.log(err);
+      } else {
+          console.log('ok.');
+      }
+  });
+  ```
+</code></pre></div></div>
+
+<ol>
+  <li>
+    <p>同步文件写入:   同步方法:<code class="highlighter-rouge">writeFileSync()</code></p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'use strict';
+var fs = require('fs');
+var data = 'Hello, Node.js';
+fs.writeFileSync('output.txt', data);
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>### 其他属性</p>
+
+<p>### stat</p>
+
+<p>如果我们要获取文件大小，创建时间等信息，可以使用<code class="highlighter-rouge">fs.stat()</code>，它返回一个<code class="highlighter-rouge">Stat</code>对象，能告诉我们文件或目录的详细信息：</p>
+
+<p><code class="highlighter-rouge">stat()</code>也有一个对应的同步函数<code class="highlighter-rouge">statSync()</code>;</p>
+
+<p>案例：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   'use strict';
+   var fs = require('fs');
+   fs.stat('sample.txt', function (err, stat) {
+       if (err) {
+           console.log(err);
+       } else {
+           // 是否是文件:
+           console.log('isFile: ' + stat.isFile());
+           // 是否是目录:
+           console.log('isDirectory: ' + stat.isDirectory());
+           if (stat.isFile()
+               // 文件大小:
+               console.log('size: ' + stat.size);
+               // 创建时间, Date对象:
+               console.log('birth time: ' + stat.birthtime);
+               // 修改时间, Date对象:
+               console.log('modified time: ' + stat.mtime);
+           }
+       }
+   });
+</code></pre></div></div>
+
+<p>运行结果：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>isFile: true
+   isDirectory: false
+   size: 181
+   birth time: Fri Dec 11 2015 09:43:41 GMT+0800 (CST)
+   modified time: Fri Dec 11 2015 12:09:00 GMT+0800 (CST)
+</code></pre></div></div>
+
+<p>##  注意：</p>
+
+<p><strong><em>由于Node环境执行的JavaScript代码是服务器端代码，所以，绝大部分需要在服务器运行期反复执行业务逻辑的代码，</em>必须使用异步代码<em>，否则，同步代码在执行时期，服务器将停止响应，因为JavaScript只有一个执行线程。</em></strong><em>**</em></p>
+
+<p>#### stream</p>
+
+<p><code class="highlighter-rouge">stream</code>是Node.js提供的又一个仅在服务区端可用的模块，目的是支持“流”这种数据结构。</p>
+
+<ol>
+  <li>流的特点是数据是有序的，而且必须依次读取，或者依次写入，不能像Array那样随机定位。</li>
+  <li>
+    <p>标准输入流（stdin）:敲键盘的时候，就可以把每个字符依次连起来，看成字符流。这个流是从键盘输入到应用程序;</p>
+  </li>
+  <li>标准输出流（stdout）:如果应用程序把字符一个一个输出到显示器上，这也可以看成是一个流;</li>
+  <li><code class="highlighter-rouge">data</code>事件表示流的数据已经可以读取了，<code class="highlighter-rouge">end</code>事件表示这个流已经到末尾了，没有数据可以读取了，<code class="highlighter-rouge">error</code>事件表示出错了。</li>
+</ol>
+
+<hr />
+
+<p><strong>问题</strong></p>
+
+<p><img src="/home/lixuehe/.config/Typora/typora-user-images/1564019695650.png" alt="1564019695650" /></p>
+
+<p>!(/home/lixuehe/.config/Typora/typora-user-images/1564019695650.png)</p>
+
+<p><img src="/home/lixuehe/.config/Typora/typora-user-images/1564022534231.png" alt="1564022534231" /></p>
+
+:ET

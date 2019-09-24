@@ -1,0 +1,1150 @@
+I"��<h1 id="字符串的新增方法">字符串的新增方法</h1>
+
+<h4 id="1stringfromcodepoint">1.String.fromCodePoint()</h4>
+
+<ul>
+  <li>
+    <p>用于从 Unicode 码点返回对应字符，可以识别码点大于<code class="highlighter-rouge">0xFFFF</code>的字符;</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>console.log(String.fromCodePoint(0x20BB7));   // "𠮷"
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h4 id="2-stringraw">2. String.raw()</h4>
+
+<ul>
+  <li>
+    <p>ES6 还为原生的 String 对象;往往用于模板字符串的处理方法。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>String.raw`Hi\n${2+3}!`;
+// 返回 "Hi\\n5!"
+  
+String.raw`Hi\u000A!`;
+// 返回 "Hi\\u000A!"
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>String.raw()`方法可以作为处理模板字符串的基本方法，它会将所有变量替换，而且对斜杠进行转义，方便下一步作为字符串来使用。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>String.raw({ raw: 'test' }, 0, 1, 2);     // 't0e1s2t'
+// 等同于
+String.raw({ raw: ['t','e','s','t'] }, 0, 1, 2);
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h4 id="3实例方法codepointat">3.实例方法：codePointAt()</h4>
+
+<ul>
+  <li>
+    <p>作用：正确处理 4 个字节储存的字符，返回一个字符的码点。</p>
+  </li>
+  <li>
+    <p>对于那些两个字节储存的常规字符，它的返回结果与<code class="highlighter-rouge">charCodeAt()</code>方法相同。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var s = "𠮷";
+s.length // 2
+s.charAt(0) // ''
+s.charAt(1) // ''
+s.charCodeAt(0) // 55362
+s.charCodeAt(1) // 57271
+-------------------------------
+let s = '𠮷a';
+s.codePointAt(0) // 134071
+s.codePointAt(1) // 57271
+s.codePointAt(2) // 97
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">codePointAt()</code>方法返回的是码点的十进制值，如果想要十六进制的值，可以使用<code class="highlighter-rouge">toString()</code>方法转换一下。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>let s = '𠮷a';
+s.codePointAt(0).toString(16) // "20bb7"
+s.codePointAt(2).toString(16) // "61"
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>字符<code class="highlighter-rouge">a</code>在字符串<code class="highlighter-rouge">s</code>的正确位置序号应该是 1，但是必须向<code class="highlighter-rouge">codePointAt()</code>方法传入 2。解决这个问题的一个办法是使用<code class="highlighter-rouge">for...of</code>循环，因为它会正确识别 32 位的 UTF-16 字符；</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>let s = '𠮷a';
+for (let ch of s) {
+  console.log(ch.codePointAt(0).toString(16));
+}
+// 20bb7
+// 61
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>使用扩展运算符（<code class="highlighter-rouge">...</code>）进行展开运算。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>let arr = [...'𠮷a']; // arr.length === 2
+arr.forEach(
+  ch =&gt; console.log(ch.codePointAt(0).toString(16))
+);
+// 20bb7
+// 61
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>测试一个字符是由两个字节还是由四个字节组成的？</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function is32Bit(c) {
+  return c.codePointAt(0) &gt; 0xFFFF;
+}
+  
+is32Bit("𠮷") // true
+is32Bit("a") // false
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h4 id="4实例方法normalize">4.实例方法：normalize()</h4>
+
+<ul>
+  <li>
+    <p>作用：将字符的不同表示方法统一为同样的形式，这称为 Unicode 正规化。<code class="highlighter-rouge">normalize</code>方法目前不能识别三个或三个以上字符的合成</p>
+  </li>
+  <li>
+    <p>案例：``O<code class="highlighter-rouge">（\u004F）和</code>ˇ<code class="highlighter-rouge">（\u030C）合成</code>Ǒ`（\u004F\u030C）</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'\u01D1'.normalize() === '\u004F\u030C'.normalize()
+// true
+</code></pre></div>    </div>
+  </li>
+  <li>参数:指定<code class="highlighter-rouge">normalize</code>的方式:</li>
+  <li><code class="highlighter-rouge">NFC</code>参数返回字符的合成形式，<code class="highlighter-rouge">NFD</code>参数返回字符的分解形式。
+    <ul>
+      <li><code class="highlighter-rouge">NFC</code>，默认参数，表示“标准等价合成”（Normalization Form Canonical Composition），返回多个简单字符的合成字符。所谓“标准等价”指的是视觉和语义上的等价。</li>
+      <li><code class="highlighter-rouge">NFD</code>，表示“标准等价分解”（Normalization Form Canonical Decomposition），即在标准等价的前提下，返回合成字符分解的多个简单字符。</li>
+      <li><code class="highlighter-rouge">NFKC</code>，表示“兼容等价合成”（Normalization Form Compatibility Composition），返回合成字符。所谓“兼容等价”指的是语义上存在等价，但视觉上不等价，比如“囍”和“喜喜”。（这只是用来举例，<code class="highlighter-rouge">normalize</code>方法不能识别中文。）</li>
+      <li><code class="highlighter-rouge">NFKD</code>，表示“兼容等价分解”（Normalization Form Compatibility Decomposition），即在兼容等价的前提下，返回合成字符分解的多个简单字符。</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="5实例方法includes-startswith-endswith---------原先的indexof方法">5.实例方法：includes(), startsWith(), endsWith()         –原先的<code class="highlighter-rouge">indexOf</code>方法</h4>
+
+<ul>
+  <li>
+    <p>确定一个字符串是否包含在另一个字符串中方法?</p>
+
+    <ul>
+      <li><strong>includes()</strong>：返回布尔值，表示是否找到了参数字符串。</li>
+      <li><strong>startsWith()</strong>：返回布尔值，表示参数字符串是否在原字符串的头部。</li>
+      <li><strong>endsWith()</strong>：返回布尔值，表示参数字符串是否在原字符串的尾部。</li>
+    </ul>
+  </li>
+  <li>
+    <p>参数：支持两个，第一个参数：要查找的字符串；第二个参数：开始搜索的位置。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>let s = 'Hello world!';
+console.log(s.startsWith('world', 6)) // true
+console.log(s.endsWith('Hello', 5)) // true
+console.log(s.includes('Hello', 0))  // true
+</code></pre></div>    </div>
+
+    <p><strong>endsWith的行为与其他两个方法有所不同。它针对前n个字符，而其他两个方法针对从第n个位置直到字符串结束</strong></p>
+  </li>
+</ul>
+
+<h4 id="6实例方法repeat">6.实例方法：repeat()</h4>
+
+<ul>
+  <li>作用：<code class="highlighter-rouge">repeat</code>方法返回一个新字符串，表示将原字符串重复<code class="highlighter-rouge">n</code>次。</li>
+  <li>如果参数是小数，会被取整;</li>
+  <li>如果<code class="highlighter-rouge">参数是负数或者</code>Infinity，会报错;</li>
+  <li>
+    <p>如果参数是 0 到-1 之间的小数，则等同于 0.</p>
+  </li>
+  <li>
+    <p>参数<code class="highlighter-rouge">NaN</code>等同于 0;</p>
+  </li>
+  <li>
+    <p>如果<code class="highlighter-rouge">repeat</code>的参数是字符串，则会先转换成数字。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'hello'.repeat(2) 		// "hellohello"
+'na'.repeat(Infinity)   // RangeError
+'na'.repeat(-1)         // RangeError
+'na'.repeat(-0.9) 		// ""
+'na'.repeat('3') 		// "nanana"
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h4 id="7实例方法padstartpadend">7.实例方法：padStart()，padEnd()</h4>
+
+<ul>
+  <li>
+    <p>作用：实现字符串补全长度的功能。如果某个字符串不够指定长度，会在头部或尾部补全。<code class="highlighter-rouge">padStart()</code>用于头部补全，<code class="highlighter-rouge">padEnd()</code>用于尾部补全。</p>
+  </li>
+  <li>
+    <p>参数：第一个参数是字符串补全生效的最大长度，第二个参数是用来补全的字符串。</p>
+  </li>
+  <li>
+    <p>如果原字符串的长度，等于或大于最大长度，则字符串补全不生效，返回原字符串。</p>
+  </li>
+  <li>
+    <p>如果用来补全的字符串与原字符串，两者的长度之和超过了最大长度，则会截去超出位数的补全字符串。</p>
+  </li>
+  <li>
+    <p>如果省略第二个参数，默认使用空格补全长度。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'x'.padStart(5, 'ab') 		// 'ababx'
+'x'.padEnd(5, 'ab') 		// 'xabab'
+'xxx'.padStart(2, 'ab')		// 'xxx'
+'xxx'.padEnd(2, 'ab') 		// 'xxx'
+'abc'.padStart(10, '0123456789')     // '0123456abc'
+'x'.padStart(4) // '   x'
+'x'.padEnd(4) // 'x   '
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>用途：</p>
+
+    <ul>
+      <li>
+        <p>为数值补全指定位数。下面代码生成 10 位的数值字符串。</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'1'.padStart(10, '0') // "0000000001"
+'12'.padStart(10, '0') // "0000000012"
+'123456'.padStart(10, '0') // "0000123456"
+</code></pre></div>        </div>
+      </li>
+      <li>
+        <p>提示字符串格式。</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'12'.padStart(10, 'YYYY-MM-DD') // "YYYY-MM-12"
+'09-12'.padStart(10, 'YYYY-MM-DD') // "YYYY-09-12"
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="8实例方法trimstarttrimend">8.实例方法：trimStart()，trimEnd()</h4>
+
+<ul>
+  <li>
+    <p>作用：<code class="highlighter-rouge">trimStart()</code>消除字符串头部的空格，<code class="highlighter-rouge">trimEnd()</code>消除尾部的空格。它们返回的都是新字符串，不会修改原始字符串。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const s = '  abc  ';
+s.trim() 			// "abc"
+s.trimStart() 		// "abc  "
+s.trimEnd() 		// "  abc"
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>这两个方法对字符串头部（或尾部）的 tab 键、换行符等不可见的空白符号也有效。</p>
+  </li>
+</ul>
+
+<h4 id="9实例方法matchall">9.实例方法：matchAll()</h4>
+
+<ul>
+  <li>作用：返回一个正则表达式在当前字符串的所有匹配；</li>
+</ul>
+
+<hr />
+
+<hr />
+
+<h1 id="正则的扩展">正则的扩展</h1>
+
+<h4 id="1regexp-构造函数">1.RegExp 构造函数</h4>
+
+<p>ES5 中的构造函数：</p>
+
+<ol>
+  <li>
+    <p>第一种情况是，参数是字符串，这时第二个参数表示正则表达式的修饰符（flag）。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var regex = new RegExp('xyz', 'i');
+// 等价于
+var regex = /xyz/i;
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>第二种情况是，参数是一个正则表示式，这时会返回一个原有正则表达式的拷贝。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var regex = new RegExp(/xyz/i);
+// 等价于
+var regex = /xyz/i;
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>ＥS6中不允许使用第二个参数添加修饰符，直接报错；</p>
+
+<ul>
+  <li>
+    <p>如果<code class="highlighter-rouge">RegExp</code>构造函数第一个参数是一个正则对象，那么可以使用第二个参数指定修饰符。而且，返回的正则表达式会忽略原有的正则表达式的修饰符，只使用新指定的修饰符。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>new RegExp(/abc/ig, 'i').fla
+gs     // "i"原有正则对象的修饰符是ig，它会被第二个参数i覆盖。
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h4 id="2字符串的正则方法--matchreplacesearch和split">2.字符串的正则方法  <code class="highlighter-rouge">match()</code>、<code class="highlighter-rouge">replace()</code>、<code class="highlighter-rouge">search()</code>和<code class="highlighter-rouge">split()</code></h4>
+
+<ul>
+  <li><code class="highlighter-rouge">String.prototype.match</code> 调用 <code class="highlighter-rouge">RegExp.prototype[Symbol.match]</code></li>
+  <li><code class="highlighter-rouge">String.prototype.replace</code> 调用 <code class="highlighter-rouge">RegExp.prototype[Symbol.replace]</code></li>
+  <li><code class="highlighter-rouge">String.prototype.search</code> 调用 <code class="highlighter-rouge">RegExp.prototype[Symbol.search]</code></li>
+  <li><code class="highlighter-rouge">String.prototype.split</code> 调用 <code class="highlighter-rouge">RegExp.prototype[Symbol.split]</code></li>
+</ul>
+
+<h4 id="3u-修饰符">3.u 修饰符</h4>
+
+<p>作用：含义为“Unicode 模式”，用来正确处理大于<code class="highlighter-rouge">\uFFFF</code>的 Unicode 字符。也就是说，会正确处理四个字节的 UTF-16 编码。</p>
+
+<ul>
+  <li>
+    <p><strong>点字符（<code class="highlighter-rouge">.</code>）在正则表达式中，含义是除了换行符以外的任意单个字符。</strong></p>
+
+    <p>对于码点大于<code class="highlighter-rouge">0xFFFF</code>的 Unicode 字符，点字符不能识别，必须加上<code class="highlighter-rouge">u</code>修饰符。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var s = '𠮷';
+/^.$/.test(s) 		// false
+/^.$/u.test(s) 		// true
+/^.$/u.test("1") 	// true
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>Unicode 字符表示法:用大括号表示 Unicode 字符</strong></p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/\u{61}/.test('a') // false
+/\u{61}/u.test('a') // true
+/\u{20BB7}/u.test('𠮷') // true
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>量词</strong>:使用<code class="highlighter-rouge">u</code>修饰符后，所有量词都会正确识别码点大于<code class="highlighter-rouge">0xFFFF</code>的 Unicode 字符。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/a{2}/.test('aa') // true
+/a{2}/u.test('aa') // true
+/𠮷{2}/.test('𠮷𠮷') // false
+/𠮷{2}/u.test('𠮷𠮷') // true
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>预定义模式</strong>:<code class="highlighter-rouge">u</code>修饰符也影响到预定义模式，能否正确识别码点大于<code class="highlighter-rouge">0xFFFF</code>的 Unicode 字符。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/^\S$/.test('𠮷') // false
+/^\S$/u.test('𠮷') // true
+</code></pre></div>    </div>
+
+    <p><code class="highlighter-rouge">\S</code>是预定义模式，匹配所有非空白字符。只有加了<code class="highlighter-rouge">u</code>修饰符，它才能正确匹配码点大于<code class="highlighter-rouge">0xFFFF</code>的 Unicode 字符。</p>
+
+    <p>案例：返回字符串的长度的函数：</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var s1 = '𠮷';
+console.log(/^.$/.test(s1) );    // false
+console.log(/^.$/u.test("1"));   // true
+function codePointLength(text) {
+    var result = text.match(/[\s\S]/gu);
+    return result ? result.length : 0;
+}
+let s = '𠮷𠮷';
+console.log(s.length);            //4
+console.log(codePointLength(s));  //2
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p><strong>i修饰符</strong>  \u004B<code class="highlighter-rouge">与</code>\u212A<code class="highlighter-rouge">都是大写的</code>K</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/[a-z]/i.test('\u212A') // false
+/[a-z]/iu.test('\u212A') // true
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h4 id="4regexpprototypeunicode-属性表示是否设置了u修饰符">4.RegExp.prototype.unicode 属性:表示是否设置了<code class="highlighter-rouge">u</code>修饰符。</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const r1 = /hello/;
+const r2 = /hello/u;
+
+r1.unicode // false
+r2.unicode // true
+</code></pre></div></div>
+
+<h4 id="5y-修饰符---粘连sticky修饰符">5.y 修饰符   粘连”（sticky）修饰符。</h4>
+
+<p>全局匹配，后一次匹配从上一次匹配成功的下一个位置开始,确保匹配必须从剩余的第一个位置开始，这也就是“粘连”的涵义。</p>
+
+<ul>
+  <li>
+    <p>exec():用于检索字符串中的正则表达式的匹配。</p>
+
+    <ol>
+      <li>返回一个数组，其中存放匹配的结果。如果未找到匹配，则返回值为 null。</li>
+      <li>当 exec() 找到了与表达式相匹配的文本时，在匹配后，它将把 RegExpObject 的 lastIndex 属性设置为匹配文本的最后一个字符的下一个位置。这就是说，您可以通过反复调用 exec() 方法来遍历字符串中的所有匹配文本。当 exec() 再也找不到匹配的文本时，它将返回 null，并把 lastIndex 属性重置为 0。</li>
+      <li><strong>重要事项：</strong>如果在一个字符串中完成了一次模式匹配之后要开始检索新的字符串，就必须手动地把 lastIndex 属性重置为 0。</li>
+    </ol>
+  </li>
+  <li>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var s = 'aaa_aa_a';
+var r1 = /a+/g;
+var r2 = /a+/y;
+  
+console.log(r1.exec(s)) 	// ["aaa"]
+console.log(r2.exec(s)) 	// ["aaa"]
+console.log(r1.exec(s)) 	// ["aa"]
+console.log(r1.exec(s)) 	// ["a"]
+console.log(r1.exec(s)) 	// ["null"]
+console.log(r2.exec(s))		// null
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h4 id="6-regexpprototypesticky-属性">6. RegExp.prototype.sticky 属性</h4>
+
+<p>表示是否设置了<code class="highlighter-rouge">y</code>修饰符</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var r = /hello\d/y;
+r.sticky // true
+</code></pre></div></div>
+
+<h4 id="7regexpprototypeflags-属性">7.RegExp.prototype.flags 属性</h4>
+
+<p>返回正则表达式的修饰符；</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// ES5 的 source 属性
+// 返回正则表达式的正文
+/abc/ig.source
+// "abc"
+// ES6 的 flags 属性
+// 返回正则表达式的修饰符
+/abc/ig.flags
+// 'gi'
+</code></pre></div></div>
+
+<h4 id="8s-修饰符dotall-模式">8.s 修饰符：dotAll 模式</h4>
+
+<p>行终止符，就是该字符表示一行的终结,以下四个字符属于“行终止符”。</p>
+
+<ul>
+  <li>U+000A 换行符（<code class="highlighter-rouge">\n</code>）</li>
+  <li>U+000D 回车符（<code class="highlighter-rouge">\r</code>）</li>
+  <li>U+2028 行分隔符（line separator）</li>
+  <li>U+2029 段分隔符（paragraph separator）</li>
+</ul>
+
+<p><code class="highlighter-rouge">dotAll</code>模式，即点（dot）代表一切字符。所以，正则表达式还引入了一个<code class="highlighter-rouge">dotAll</code>属性，返回一个布尔值，表示该正则表达式是否处在<code class="highlighter-rouge">dotAll</code>模式。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const re = /foo.bar/s;
+// 另一种写法
+// const re = new RegExp('foo.bar', 's');
+re.test('foo\nbar') // true
+re.dotAll // true
+re.flags // 's'
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">/s</code>修饰符和多行修饰符<code class="highlighter-rouge">/m</code>不冲突，两者一起使用的情况下，<code class="highlighter-rouge">.</code>匹配所有字符，而<code class="highlighter-rouge">^</code>和<code class="highlighter-rouge">$</code>匹配每一行的行首和行尾。</p>
+
+<h4 id="9后行断言">9.后行断言</h4>
+
+<p>“后行断言”正好与“先行断言”相反，<code class="highlighter-rouge">x</code>只有在<code class="highlighter-rouge">y</code>后面才匹配，必须写成<code class="highlighter-rouge">/(?&lt;=y)x/</code>。比如，只匹配美元符号之后的数字，要写成<code class="highlighter-rouge">/(?&lt;=\$)\d+/</code>。“后行否定断言”则与“先行否定断言”相反，<code class="highlighter-rouge">x</code>只有不在<code class="highlighter-rouge">y</code>后面才匹配，必须写成<code class="highlighter-rouge">/(?&lt;!y)x/</code>。比如，只匹配不在美元符号后面的数字，要写成<code class="highlighter-rouge">/(?&lt;!\$)\d+/</code>。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/\d+(?=%)/.exec('100% of US presidents have been male')  	// ["100"]先行断言
+/(?&lt;=\$)\d+/.exec('Benjamin Franklin is on the $100 bill')  // ["100"]
+/(?&lt;!\$)\d+/.exec('it’s is worth about €90')                // ["90"]
+</code></pre></div></div>
+
+<h4 id="10unicode-属性类">10.Unicode 属性类</h4>
+
+<h4 id="p和p允许正则表达式匹配符合-unicode-某种属性的所有字符"><code class="highlighter-rouge">\p{...}</code>和<code class="highlighter-rouge">\P{...}</code>，允许正则表达式匹配符合 Unicode 某种属性的所有字符。</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const regexGreekSymbol = /\p{Script=Greek}/u;
+regexGreekSymbol.test('π') // true　　　　　　　\p{Script=Greek}指定匹配一个希腊文字母，所以匹配π成功。
+</code></pre></div></div>
+
+<p>Unicode 属性类要指定属性名和属性值。</p>
+
+<p><code class="highlighter-rouge">\P{…}</code>是<code class="highlighter-rouge">\p{…}</code>的反向匹配，即匹配不满足条件的字符。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1.匹配所有十进制字符
+const regex = /^\p{Decimal_Number}+$/u;
+regex.test('𝟏𝟐𝟑𝟜𝟝𝟞𝟩𝟪𝟫𝟬𝟭𝟮𝟯𝟺𝟻𝟼') // true
+2.匹配罗马数字。
+// 匹配所有数字
+const regex = /^\p{Number}+$/u;
+regex.test('²³¹¼½¾') // true
+regex.test('㉛㉜㉝') // true
+regex.test('ⅠⅡⅢⅣⅤⅥⅦⅧⅨⅩⅪⅫ') // true
+3.// 匹配所有空格
+\p{White_Space}
+
+// 匹配各种文字的所有字母，等同于 Unicode 版的 \w
+[\p{Alphabetic}\p{Mark}\p{Decimal_Number}\p{Connector_Punctuation}\p{Join_Control}]
+
+// 匹配各种文字的所有非字母的字符，等同于 Unicode 版的 \W
+[^\p{Alphabetic}\p{Mark}\p{Decimal_Number}\p{Connector_Punctuation}\p{Join_Control}]
+
+// 匹配 Emoji
+/\p{Emoji_Modifier_Base}\p{Emoji_Modifier}?|\p{Emoji_Presentation}|\p{Emoji}\uFE0F/gu
+
+// 匹配所有的箭头字符
+const regexArrows = /^\p{Block=Arrows}+$/u;
+regexArrows.test('←↑→↓↔↕↖↗↘↙⇏⇐⇑⇒⇓⇔⇕⇖⇗⇘⇙⇧⇩') // true
+
+</code></pre></div></div>
+
+<h4 id="11具名组匹配则表达式使用圆括号进行组匹配">11.具名组匹配：则表达式使用圆括号进行组匹配。</h4>
+
+<p>允许为每一个组匹配指定一个名字，既便于阅读代码，又便于引用。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const RE_DATE = /(?&lt;year&gt;\d{4})-(?&lt;month&gt;\d{2})-(?&lt;day&gt;\d{2})/;
+const matchObj = RE_DATE.exec('1999-12-31');
+const year = matchObj.groups.year; // 1999
+const month = matchObj.groups.month; // 12
+const day = matchObj.groups.day; // 31
+</code></pre></div></div>
+
+<p>如果具名组没有匹配，那么对应的<code class="highlighter-rouge">groups</code>对象属性会是<code class="highlighter-rouge">undefined</code></p>
+
+<ul>
+  <li>
+    <h3 id="解构赋值和替换">解构赋值和替换</h3>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>let {groups: {one, two}} = /^(?&lt;one&gt;.*):(?&lt;two&gt;.*)$/u.exec('foo:bar');
+one  // foo
+two  // bar
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <h3 id="引用">引用</h3>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const RE_TWICE = /^(?&lt;word&gt;[a-z]+)!\k&lt;word&gt;$/;
+RE_TWICE.test('abc!abc') // true
+RE_TWICE.test('abc!ab') // false
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h4 id="12stringprototypematchall">12.String.prototype.matchAll</h4>
+
+<hr />
+
+<h1 id="数值的扩展">数值的扩展</h1>
+
+<h4 id="1二进制和八进制表示法">1.二进制和八进制表示法:</h4>
+
+<p>二进制和八进制数值的新的写法，分别用前缀<code class="highlighter-rouge">0b</code>（或<code class="highlighter-rouge">0B</code>）和<code class="highlighter-rouge">0o</code>（或<code class="highlighter-rouge">0O</code>）表示。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>0b111110111 === 503 // true
+0o767 === 503 // true
+</code></pre></div></div>
+
+<p>将<code class="highlighter-rouge">0b</code>和<code class="highlighter-rouge">0o</code>前缀的字符串数值转为十进制，要使用<code class="highlighter-rouge">Number</code>方法。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Number('0b111')  // 7
+Number('0o10')  // 8
+</code></pre></div></div>
+
+<h4 id="2numberisfinite-numberisnan">2.Number.isFinite(), Number.isNaN()</h4>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">Number.isFinite()</code>用来检查一个数值是否为有限的（finite），即不是<code class="highlighter-rouge">Infinity</code>(无限)。</p>
+
+    <p>参数类型不是数值，<code class="highlighter-rouge">Number.isFinite</code>一律返回<code class="highlighter-rouge">false</code>。</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">Number.isNaN()</code>用来检查一个值是否为<code class="highlighter-rouge">NaN</code>。</p>
+
+    <p>参数类型不是<code class="highlighter-rouge">NaN</code>，<code class="highlighter-rouge">Number.isNaN</code>一律返回<code class="highlighter-rouge">false</code>。</p>
+  </li>
+  <li>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>isFinite(25) // true    传统方法先调用Number()将非数值的值转为数值，再进行判断，
+isFinite("25") // true
+Number.isFinite(25) // true
+Number.isFinite("25") // false
+  
+isNaN(NaN) // true
+isNaN("NaN") // true
+Number.isNaN(NaN) // true
+Number.isNaN("NaN") // false
+Number.isNaN(1) // false
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h4 id="3numberparseint-numberparsefloat">3.Number.parseInt(), Number.parseFloat()</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// ES5的写法
+parseInt('12.34') // 12
+parseFloat('123.45#') // 123.45
+
+// ES6的写法
+Number.parseInt('12.34') // 12
+Number.parseFloat('123.45#') // 123.45
+</code></pre></div></div>
+
+<h4 id="4numberisinteger">4.Number.isInteger()</h4>
+
+<ul>
+  <li>
+    <p>作用：用来判断一个数值是否为整数。</p>
+  </li>
+  <li>
+    <p>JavaScript 内部，整数和浮点数采用的是同样的储存方法，所以 25 和 25.0 被视为同一个值。</p>
+  </li>
+  <li>
+    <p>JavaScript 中数值精度最多可以达到 53 个二进制位（1 个隐藏位与 52 个有效位）；</p>
+
+    <ol>
+      <li>
+        <p>如果数值的精度超过这个限度，第54位及后面的位就会被丢弃，这种情况下，<code class="highlighter-rouge">Number.isInteger</code>可能会误判。</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Number.isInteger(3.0000000000000002) // true
+</code></pre></div>        </div>
+      </li>
+      <li>
+        <p>如果一个数值的绝对值小于<code class="highlighter-rouge">Number.MIN_VALUE</code>（5E-324），即小于 JavaScript 能够分辨的最小值，会被自动转为 0。这时，<code class="highlighter-rouge">Number.isInteger</code>也会误判.</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Number.isInteger(5E-324) // false
+Number.isInteger(5E-325) // true
+</code></pre></div>        </div>
+      </li>
+    </ol>
+  </li>
+</ul>
+
+<h4 id="5numberepsilon">5.Number.EPSILON</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Math.pow(x,y)    //x 的 y 次幂。
+</code></pre></div></div>
+
+<ul>
+  <li>
+    <p>一个极小的常量<code class="highlighter-rouge">Number.EPSILON</code>:它表示 1 与大于 1 的最小浮点数之间的差。</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">Number.EPSILON</code>实际上是 JavaScript 能够表示的最小精度。误差如果小于这个值，就可以认为已经没有意义了，即不存在误差了。</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">Number.EPSILON</code>的实质是一个可以接受的最小误差范围。</p>
+
+    <p>例如：误差范围设为 2 的-50 次方（即<code class="highlighter-rouge">Number.EPSILON * Math.pow(2, 2)</code>），即如果两个浮点数的差小于这个值，我们就认为这两个浮点数相等。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//误差检查函数。
+function withinErrorMargin (left, right) {
+  return Math.abs(left - right) &lt; Number.EPSILON * Math.pow(2, 2);
+}
+  
+0.1 + 0.2 === 0.3 // false
+withinErrorMargin(0.1 + 0.2, 0.3) // true
+  
+1.1 + 1.3 === 2.4 // false
+withinErrorMargin(1.1 + 1.3, 2.4) // true
+  
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h4 id="6安全整数和-numberissafeinteger">6.安全整数和 Number.isSafeInteger()</h4>
+
+<ul>
+  <li>
+    <p>JavaScript 能够准确表示的整数范围在<code class="highlighter-rouge">-2^53</code>到<code class="highlighter-rouge">2^53</code>之间（不含两个端点），超过这个范围，无法精确表示这个值。</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">Number.MAX_SAFE_INTEGER</code>和<code class="highlighter-rouge">Number.MIN_SAFE_INTEGER</code>这两个常量，用来表示这个范围的上下限。</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">Number.isSafeInteger()</code>则是用来判断一个整数是否落在这个范围之内。</p>
+  </li>
+  <li>
+    <p>需要注意。验证运算结果是否落在安全整数的范围内，不要只验证运算结果，而要同时验证参与运算的每个值。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function trusty (left, right, result) {
+  if (
+    Number.isSafeInteger(left) &amp;&amp;
+    Number.isSafeInteger(right) &amp;&amp;
+    Number.isSafeInteger(result)
+  ) {
+    return result;
+  }
+  throw new RangeError('Operation cannot be trusted!');
+}
+  
+trusty(9007199254740993, 990, 9007199254740993 - 990)
+// RangeError: Operation cannot be trusted!
+  
+trusty(1, 2, 3)
+// 3
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h4 id="7math对象的扩展">7.Math对象的扩展</h4>
+
+<ol>
+  <li>
+    <p>Math.trunc():用于去除一个数的小数部分，返回整数部分;</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">Math.sign</code>:用来判断一个数到底是正数、负数、还是零。对于非数值，会先将其转换为数值。</p>
+
+    <p>返回五种值。</p>
+
+    <ul>
+      <li>参数为正数，返回<code class="highlighter-rouge">+1</code>；</li>
+      <li>参数为负数，返回<code class="highlighter-rouge">-1</code>；</li>
+      <li>参数为 0，返回<code class="highlighter-rouge">0</code>；</li>
+      <li>参数为-0，返回<code class="highlighter-rouge">-0</code>;</li>
+      <li>其他值，返回<code class="highlighter-rouge">NaN</code>。</li>
+    </ul>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">Math.cbrt</code>:用于计算一个数的立方根。</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">Math.clz32()</code>:将参数转为 32 位无符号整数的形式，然后返回这个 32 位值里面有多少个前导 0。</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">Math.imul</code>:返回两个数以 32 位带符号整数形式相乘的结果，返回的也是一个 32 位的带符号整数。</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">Math.fround</code>:将64位双精度浮点数转为32位单精度浮点数。如果小数的精度超过24个二进制位，返回值就会不同于原值，否则返回值不变（即与64位双精度值一致）。</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">Math.hypot</code>方法返回所有参数的平方和的平方根。如果参数不是数值，<code class="highlighter-rouge">Math.hypot</code>方法会将其转为数值。只要有一个参数无法转为数值，就会返回 NaN。</p>
+  </li>
+  <li>
+    <p>对数方法：</p>
+
+    <ol>
+      <li><code class="highlighter-rouge">Math.expm1(x)</code>返回 e^x - 1，即<code class="highlighter-rouge">Math.exp(x) - 1</code>。</li>
+      <li><code class="highlighter-rouge">Math.log1p(x)</code>方法返回<code class="highlighter-rouge">1 + x</code>的自然对数，即<code class="highlighter-rouge">Math.log(1 + x)</code>。如果<code class="highlighter-rouge">x</code>小于-1，返回<code class="highlighter-rouge">NaN</code>。</li>
+      <li><code class="highlighter-rouge">Math.log10(x)</code>返回以 10 为底的<code class="highlighter-rouge">x</code>的对数。如果<code class="highlighter-rouge">x</code>小于 0，则返回 NaN。</li>
+      <li><code class="highlighter-rouge">Math.log2(x)</code>返回以 2 为底的<code class="highlighter-rouge">x</code>的对数。如果<code class="highlighter-rouge">x</code>小于 0，则返回 NaN。</li>
+    </ol>
+  </li>
+  <li>
+    <p>ES6 新增了 6 个双曲函数方法。</p>
+
+    <ul>
+      <li><code class="highlighter-rouge">Math.sinh(x)</code> 返回<code class="highlighter-rouge">x</code>的双曲正弦（hyperbolic sine）</li>
+      <li><code class="highlighter-rouge">Math.cosh(x)</code> 返回<code class="highlighter-rouge">x</code>的双曲余弦（hyperbolic cosine）</li>
+      <li><code class="highlighter-rouge">Math.tanh(x)</code> 返回<code class="highlighter-rouge">x</code>的双曲正切（hyperbolic tangent）</li>
+      <li><code class="highlighter-rouge">Math.asinh(x)</code> 返回<code class="highlighter-rouge">x</code>的反双曲正弦（inverse hyperbolic sine）</li>
+      <li><code class="highlighter-rouge">Math.acosh(x)</code> 返回<code class="highlighter-rouge">x</code>的反双曲余弦（inverse hyperbolic cosine）</li>
+      <li><code class="highlighter-rouge">Math.atanh(x)</code> 返回<code class="highlighter-rouge">x</code>的反双曲正切（inverse hyperbolic tangent）</li>
+    </ul>
+  </li>
+  <li>
+    <p>指数运算符（<code class="highlighter-rouge">**</code>）</p>
+
+    <ul>
+      <li>
+        <p>多个指数运算符连用时，是从最右边开始计算的。</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// 相当于 2 ** (3 ** 2)
+2 ** 3 ** 2
+// 512
+</code></pre></div>        </div>
+      </li>
+      <li>
+        <p>指数运算符可以与等号结合，形成一个新的赋值运算符（<code class="highlighter-rouge">**=</code>）。</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>let a = 1.5;
+a **= 2;
+// 等同于 a = a * a;
+      
+let b = 4;
+b **= 3;
+// 等同于 b = b * b * b;
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<hr />
+
+<hr />
+
+<h1 id="函数的扩展">函数的扩展</h1>
+
+<h3 id="1函数参数的默认值">1.函数参数的默认值</h3>
+
+<ol>
+  <li>基本用法</li>
+</ol>
+
+<p>ES6 允许为函数的参数设置默认值，即直接写在参数定义的后面。</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function log(x, y = 'World') {
+  console.log(x, y);
+}
+log('Hello') // Hello World
+log('Hello', 'China') // Hello China
+log('Hello', '') // Hello
+</code></pre></div></div>
+
+<ul>
+  <li>阅读代码的人，可以立刻意识到哪些参数是可以省略的，不用查看函数体或文档；</li>
+  <li>有利于将来的代码优化，即使未来的版本在对外接口中，彻底拿掉这个参数，也不会导致以前的代码无法运行。</li>
+  <li>参数变量是默认声明的，所以不能用<code class="highlighter-rouge">let</code>或<code class="highlighter-rouge">const</code>再次声明。</li>
+  <li>使用参数默认值时，函数不能有同名参数。</li>
+  <li>参数默认值是惰性求值的,默认值不是传值的，而是每次都重新计算默认值表达式的值;</li>
+</ul>
+
+<ol>
+  <li>
+    <p>与解构赋值默认值结合使用</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function fetch(url, { body = '', method = 'GET', headers = {} } = {}) {
+  console.log(method);
+}
+fetch('http://example.com')    //省略了第二个参数；直接得到默认值；
+// "GET"
+</code></pre></div>    </div>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// 写法一:写法一函数参数的默认值是空对象，但是设置了对象解构赋值的默认值；
+function m1({x = 0, y = 0} = {}) {
+  return [x, y];
+}
+   
+// 写法二:函数参数的默认值是一个有具体属性的对象，但是没有设置对象解构赋值的默认值。
+function m2({x, y} = { x: 0, y: 0 }) {
+  return [x, y];
+}
+------------------------------------------------
+// 函数没有参数的情况
+m1() // [0, 0]
+m2() // [0, 0]
+   
+// x 和 y 都有值的情况
+m1({x: 3, y: 8}) // [3, 8]
+m2({x: 3, y: 8}) // [3, 8]
+   
+// x 有值，y 无值的情况
+m1({x: 3}) // [3, 0]
+m2({x: 3}) // [3, undefined]
+   
+// x 和 y 都无值的情况
+m1({}) // [0, 0];
+m2({}) // [undefined, undefined]
+   
+m1({z: 3}) // [0, 0]
+m2({z: 3}) // [undefined, undefined]
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>参数默认值的位置：通常情况下，定义了默认值的参数，应该是函数的尾参数。</p>
+
+    <p>如果非尾部的参数设置默认值，实际上这个参数是没法省略的。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// 例二
+function f(x, y = 5, z) {
+  return [x, y, z];
+}
+f() // [undefined, 5, undefined]
+f(1) // [1, 5, undefined]
+f(1, ,2) // 报错
+f(1, undefined, 2) // [1, 5, 2]
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>函数的<code class="highlighter-rouge">length</code>属性，将返回没有指定默认值的参数个数。</p>
+
+    <ul>
+      <li>
+        <p>也就是说，指定了默认值后，<code class="highlighter-rouge">length</code>属性将失真。</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(function (a) {}).length // 1
+(function (a = 5) {}).length // 0
+(function (a, b, c = 5) {}).length // 2
+</code></pre></div>        </div>
+      </li>
+      <li>
+        <p>如果设置了默认值的参数不是尾参数，那么<code class="highlighter-rouge">length</code>属性也不再计入后面的参数了。</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>(function (a = 0, b, c) {}).length // 0
+(function (a, b = 1, c) {}).length // 1
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>作用域：一旦设置了参数的默认值，函数进行声明初始化时，参数会形成一个单独的作用域（context）。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var x = 1;
+function foo(x){
+  console.log("1x="+x);
+  var x = 3;
+  console.log("2x="+x);
+}
+foo();
+//调用函数f00时，参数形成一个单独的作用域。在这个作用域里面，默认值变量x指向第一个参数x，而不是全局变量x，所以输出是1x输出ｕｎｄｅｆｉｎｅｄ；
+//   1x=undefined     
+//   2x=3
+</code></pre></div>    </div>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var x = 1;
+function foo(x, y = function() { x = 2; console.log("1x="+x)}) {
+  var x = 3;
+  y();
+  console.log("2x="+x);
+}
+foo();
+console.log("3x="+x) ;
+// 1x=2
+// 2x=3
+// 3x=1
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>应用：利用参数默认值，可以指定某一个参数不得省略，如果省略就抛出一个错误。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function throwIfMissing() {
+  throw new Error('Missing parameter');
+}
+function foo(mustBeProvided = throwIfMissing()) {
+  return mustBeProvided;
+}
+foo()
+// Error: Missing parameter
+</code></pre></div>    </div>
+
+    <p>如果调用的时候没有参数，就会调用默认值<code class="highlighter-rouge">throwIfMissing</code>函数，从而抛出一个错误。</p>
+  </li>
+  <li>
+    <p>rest 参数（形式为<code class="highlighter-rouge">...变量名</code>），用于获取函数的多余参数，这样就不需要使用<code class="highlighter-rouge">arguments</code>对象了。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// arguments变量的写法
+function sortNumbers() {
+  return Array.prototype.slice.call(arguments).sort();
+}
+//arguments对象不是数组，而是一个类似数组的对象。所以为了使用数组的方法，必须使用Array.prototype.slice.call先将其转为数组。
+   
+// rest参数的写法
+const sortNumbers = (...numbers) =&gt; numbers.sort();
+</code></pre></div>    </div>
+
+    <ul>
+      <li>
+        <p>rest 参数之后不能再有其他参数（即只能是最后一个参数），否则会报错。</p>
+      </li>
+      <li>
+        <p>函数的<code class="highlighter-rouge">length</code>属性，不包括 rest 参数。</p>
+
+        <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="kd">function</span><span class="p">(...</span><span class="nx">a</span><span class="p">)</span> <span class="p">{}).</span><span class="nx">length</span>  <span class="c1">// 0</span>
+<span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="p">...</span><span class="nx">b</span><span class="p">)</span> <span class="p">{}).</span><span class="nx">length</span>  <span class="c1">// 1</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>严格模式：规定只要函数参数使用了默认值、解构赋值、或者扩展运算符，那么函数内部就不能显式设定为严格模式，否则会报错。</p>
+  </li>
+  <li>
+    <p>函数的<code class="highlighter-rouge">name</code>属性，返回该函数的函数名。</p>
+
+    <ul>
+      <li>
+        <p>将一个匿名函数赋值给一个变量，ES5 的<code class="highlighter-rouge">name</code>属性，会返回空字符串，而 ES6 的<code class="highlighter-rouge">name</code>属性会返回实际的函数名。</p>
+
+        <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{};</span>
+<span class="c1">// ES5</span>
+<span class="nx">f</span><span class="p">.</span><span class="nx">name</span> <span class="c1">// ""</span>
+<span class="c1">// ES6</span>
+<span class="nx">f</span><span class="p">.</span><span class="nx">name</span> <span class="c1">// "f"</span>
+</code></pre></div>        </div>
+      </li>
+      <li>
+        <p>将一个具名函数赋值给一个变量，则 ES5 和 ES6 的<code class="highlighter-rouge">name</code>属性都返回这个具名函数原本的名字。</p>
+
+        <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">const</span> <span class="nx">bar</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">baz</span><span class="p">()</span> <span class="p">{};</span>
+     
+<span class="c1">// ES5</span>
+<span class="nx">bar</span><span class="p">.</span><span class="nx">name</span> <span class="c1">// "baz"</span>
+     
+<span class="c1">// ES6</span>
+<span class="nx">bar</span><span class="p">.</span><span class="nx">name</span> <span class="c1">// "baz"</span>
+</code></pre></div>        </div>
+      </li>
+      <li>
+        <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">(</span><span class="k">new</span> <span class="nb">Function</span><span class="p">).</span><span class="nx">name</span> <span class="c1">// "anonymous"   Function构造函数</span>
+</code></pre></div>        </div>
+      </li>
+      <li>
+        <p>bind<code class="highlighter-rouge">返回的函数，</code>name<code class="highlighter-rouge">属性值会加上</code>bound`前缀。</p>
+
+        <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">foo</span><span class="p">.</span><span class="nx">bind</span><span class="p">({}).</span><span class="nx">name</span> <span class="c1">// "bound foo"</span>
+     
+<span class="p">(</span><span class="kd">function</span><span class="p">(){}).</span><span class="nx">bind</span><span class="p">({}).</span><span class="nx">name</span> <span class="c1">// "bound "</span>
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>“箭头”（<code class="highlighter-rouge">=&gt;</code>）函数:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// rest 参数与箭头函数结合的例子。
+const numbers = (...nums) =&gt; nums;
+    
+numbers(1, 2, 3, 4, 5)
+// [1,2,3,4,5]
+    
+const headAndTail = (head, ...tail) =&gt; [head, tail];
+    
+headAndTail(1, 2, 3, 4, 5)
+// [1,[2,3,4,5]]
+</code></pre></div>    </div>
+
+    <p>使用注意：</p>
+
+    <p>（1）函数体内的<code class="highlighter-rouge">this</code>对象，就是定义时所在的对象，而不是使用时所在的对象。</p>
+
+    <p>（2）不可以当作构造函数，也就是说，不可以使用<code class="highlighter-rouge">new</code>命令，否则会抛出一个错误。</p>
+
+    <p>（3）不可以使用<code class="highlighter-rouge">arguments</code>对象，该对象在函数体内不存在。如果要用，可以用 rest 参数代替。</p>
+
+    <p>（4）不可以使用<code class="highlighter-rouge">yield</code>命令，因此箭头函数不能用作 Generator 函数。</p>
+
+    <p>上面四点中，第一点尤其值得注意。<code class="highlighter-rouge">this</code>对象的指向是可变的，但是在箭头函数中，它是固定的。</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var id = 21;
+function foo() {
+  var id = 21;
+  setTimeout(() =&gt; {
+    var id = 21;
+    console.log('id:', this.id);
+  }, 100);
+}
+foo.call({ id: 42 });
+//id:42
+</code></pre></div>    </div>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function Timer() {
+  this.s1 = 0;
+  this.s2 = 0;
+  // 箭头函数
+  setInterval(() =&gt; this.s1++, 1000);
+  // 普通函数
+  setInterval(function () {
+    this.s2++;
+  }, 1000);
+}
+    
+var timer = new Timer();
+setTimeout(() =&gt; console.log('s1: ', timer.s1), 3100);
+setTimeout(() =&gt; console.log('s2: ', timer.s2), 3100);
+// s1: 3
+// s2: 0
+前者的this绑定定义时所在的作用域（即Timer函数），后者的this指向运行时所在的作用域（即全局对象）。所以，3100 毫秒之后，timer.s1被更新了 3 次，而timer.s2一次都没更新。
+</code></pre></div>    </div>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var handler = {
+  id: '123456',
+    
+  init: function() {
+    document.addEventListener('click',
+      event =&gt; this.doSomething(event.type), false);
+  },
+    
+  doSomething: function(type) {
+    console.log('Handling ' + type  + ' for ' + this.id);
+  }
+};
+这个箭头函数里面的this，总是指向handler对象。否则，回调函数运行时，this.doSomething这一行会报错，因为此时this指向document对象。
+</code></pre></div>    </div>
+
+    <p>由于箭头函数使得<code class="highlighter-rouge">this</code>从“动态”变成“静态”，下面两个场合不应该使用箭头函数:</p>
+
+    <ul>
+      <li>第一个场合是定义对象的方法，且该方法内部包括<code class="highlighter-rouge">this</code>;</li>
+      <li>第二个场合是需要动态<code class="highlighter-rouge">this</code>的时候，也不应使用箭头函数。</li>
+    </ul>
+
+    <h5 id="嵌套的箭头函数">嵌套的箭头函数</h5>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function insert(value) {
+  return {into: function (array) {
+    return {after: function (afterValue) {
+      array.splice(array.indexOf(afterValue) + 1, 0, value);
+      return array;
+    }};
+  }};
+}
+    
+insert(2).into([1, 3]).after(1); //[1, 2, 3]
+</code></pre></div>    </div>
+
+    <p>==&gt;</p>
+
+    <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">insert</span> <span class="o">=</span> <span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">into</span><span class="p">:</span> <span class="p">(</span><span class="nx">array</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="na">after</span><span class="p">:</span> <span class="p">(</span><span class="nx">afterValue</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">array</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">array</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">afterValue</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">value</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nx">array</span><span class="p">;</span>
+<span class="p">}})});</span>
+    
+<span class="nx">insert</span><span class="p">(</span><span class="mi">2</span><span class="p">).</span><span class="nx">into</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]).</span><span class="nx">after</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> <span class="c1">//[1, 2, 3]</span>
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>尾调用优化</p>
+
+    <ul>
+      <li>
+        <p>尾调用（Tail Call）:是函数式编程的一个重要概念，本身非常简单，一句话就能说清楚，就是指某个函数的最后一步是调用另一个函数。</p>
+      </li>
+      <li>
+        <p>尾递归:函数调用自身，称为递归。如果尾调用自身，就称为尾递归。</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function Fibonacci (n) {
+  if ( n &lt;= 1 ) {return 1};
+  return Fibonacci(n - 1) + Fibonacci(n - 2);
+}
+Fibonacci(10) // 89
+Fibonacci(100) // 超时
+Fibonacci(500) // 超时
+</code></pre></div>        </div>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function Fibonacci2 (n , ac1 = 1 , ac2 = 1) {
+  if( n &lt;= 1 ) {return ac2};
+  return Fibonacci2 (n - 1, ac2, ac1 + ac2);
+}
+Fibonacci2(100) // 573147844013817200000
+Fibonacci2(1000) // 7.0330367711422765e+208
+Fibonacci2(10000) // Infinity
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h4 id="８functionprototypetostring">８．Function.prototype.toString()</h4>
+
+<p><code class="highlighter-rouge">toString()</code>方法返回函数代码本身，不会省略注释和空格。</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">function</span> <span class="cm">/* foo comment */</span> <span class="nx">foo</span> <span class="p">()</span> <span class="p">{}</span>
+
+<span class="nx">foo</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span>
+<span class="c1">// "function /* foo comment */ foo () {}"</span>
+</code></pre></div></div>
+
+<h4 id="9catch-命令的参数省略">9.catch 命令的参数省略</h4>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//以前明确要求catch命令后面必须跟参数，接受try代码块抛出的错误对象。</span>
+<span class="k">try</span> <span class="p">{</span>
+  <span class="c1">// ...</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// 处理错误</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>==&gt;</p>
+
+<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//允许catch语句省略参数。</span>
+<span class="k">try</span> <span class="p">{</span>
+  <span class="c1">// ...</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">{</span>
+  <span class="c1">// ...</span>
+<span class="err">｝</span>
+</code></pre></div></div>
+:ET

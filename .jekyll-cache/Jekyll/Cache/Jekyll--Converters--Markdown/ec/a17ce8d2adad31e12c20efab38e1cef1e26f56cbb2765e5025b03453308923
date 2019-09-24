@@ -1,0 +1,276 @@
+I"�<h1 id="markdown-的基本语法">markdown 的基本语法</h1>
+
+<h2 id="一标题">一.标题</h2>
+
+<h3 id="1在想要设置为标题的文字前面加来表示">1.在想要设置为标题的文字前面加#来表示</h3>
+
+<p>一个#是一级标题，二个#是二级标题，以此类推。支持六级标题</p>
+
+<p><strong>注：标准语法一般在#后跟个空格再写文字。</strong></p>
+
+<p>示例：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 这是一级标题     	(Ctrl 1）
+## 这是二级标题    	(Ctrl 2）
+### 这是三级标题   	(Ctrl 3）
+#### 这是四级标题  	(Ctrl 4）
+##### 这是五级标题  	(Ctrl 5）
+###### 这是六级标题 	(Ctrl 6）
+</code></pre></div></div>
+
+<p>段落 （Ctrl 0）； 提升标题级别 （Ctrl +=）;降低标题级别 （Ctrl -=）</p>
+
+<h2 id="二字体">二.字体</h2>
+
+<ul>
+  <li>
+    <h5 id="加粗">加粗</h5>
+  </li>
+</ul>
+
+<p>要加粗的文字左右分别用两个*号包起来</p>
+
+<ul>
+  <li>
+    <h5 id="斜体">斜体</h5>
+  </li>
+</ul>
+
+<p>要倾斜的文字左右分别用一个*号包起来</p>
+
+<ul>
+  <li>
+    <h5 id="斜体加粗">斜体加粗</h5>
+  </li>
+</ul>
+
+<p>要倾斜和加粗的文字左右分别用三个*号包起来</p>
+
+<ul>
+  <li>
+    <h5 id="删除线">删除线</h5>
+  </li>
+</ul>
+
+<p>要加删除线的文字左右分别用两个~~号包起来</p>
+
+<p><strong>示例：</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>**这是加粗的文字**
+*这是倾斜的文字*`
+***这是斜体加粗的文字***
+~~这是加删除线的文字~~*
+</code></pre></div></div>
+
+<h2 id="三引用">三.引用</h2>
+
+<p>在引用的文字前加&gt;即可。引用也可以嵌套，如加两个»三个»&gt;
+n个…   (Ctrl Shift Q)</p>
+
+<p>示例：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;这是引用的内容
+&gt;&gt;这是引用的内容
+&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;这是引用的内容
+</code></pre></div></div>
+
+<h2 id="四分割线">四.分割线</h2>
+
+<p>三个或者三个以上的 - 或者 * 都可以。</p>
+
+<p>示例：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">---
+</span><span class="gd">----
+</span><span class="err">***</span>
+*****
+</code></pre></div></div>
+
+<h2 id="五图片">五.图片</h2>
+
+<p>语法：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>![图片alt](图片地址 ''图片title'')
+
+图片alt就是显示在图片下面的文字，相当于对图片内容的解释。
+图片title是图片的标题，当鼠标移到图片上时显示的内容。title可加可不加
+</code></pre></div></div>
+
+<p>示例：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>![blockchain](https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/
+u=702257389,1274025419&amp;fm=27&amp;gp=0.jpg "区块链")
+</code></pre></div></div>
+
+<p><strong>上传本地图片直接点击导航栏的图片标志，选择图片即可</strong></p>
+
+<h2 id="6超链接">6.超链接</h2>
+
+<p>语法：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[超链接名](超链接地址 "超链接title")
+title可加可不加
+</code></pre></div></div>
+
+<p>示例：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[简书](http://jianshu.com)
+[百度](http://baidu.com)
+</code></pre></div></div>
+
+<p><a href="http://baidu.com">百度</a></p>
+
+<h2 id="7列表">7.列表</h2>
+
+<ul>
+  <li>
+    <h5 id="无序列表">无序列表</h5>
+  </li>
+</ul>
+
+<p>语法：
+ 无序列表用 - + * 任何一种都可以 (Ctrl Shife ])</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- 列表内容
++ 列表内容
+* 列表内容
+注意：- + * 跟内容之间都要有一个空格
+</code></pre></div></div>
+
+<ul>
+  <li>有序列表</li>
+</ul>
+
+<p>语法：
+ 数字加点  (Ctrl Shife [)</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1.列表内容
+2.列表内容
+3.列表内容
+
+注意：序号跟内容之间要有空格
+</code></pre></div></div>
+
+<ul>
+  <li>列表嵌套</li>
+</ul>
+
+<p><strong>上一级和下一级之间敲三个空格(tab)即可</strong></p>
+
+<ul>
+  <li>无序列表
+    <ul>
+      <li>一级无序列表</li>
+      <li>二级无序列表</li>
+    </ul>
+  </li>
+</ul>
+
+<ol>
+  <li>有序列表
+    <ol>
+      <li>一级有序列表</li>
+      <li>二级有序列表</li>
+    </ol>
+  </li>
+</ol>
+
+<h2 id="8表格">8.表格</h2>
+
+<p>语法： （Ctrl T）</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>表头|表头|表头
+---|:--:|---:
+内容|内容|内容
+内容|内容|内容
+
+第二行分割表头和内容。
+- 有一个就行，为了对齐，多加了几个
+文字默认居左
+-两边加：表示文字居中
+-右边加：表示文字居右
+注：原生的语法两边都要用 | 包起来。此处省略
+</code></pre></div></div>
+
+<p>示例：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>姓名|技能|排行
+--|:--:|--:
+刘备|哭|大哥
+关羽|打|二哥
+张飞|骂|三弟
+</code></pre></div></div>
+
+<table>
+  <tbody>
+    <tr>
+      <td>姓名</td>
+      <td>技能</td>
+      <td>排行</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>—</td>
+      <td>:–:</td>
+      <td>—:**</td>
+      <td>**</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>刘备</td>
+      <td>哭</td>
+      <td>大哥</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <tbody>
+    <tr>
+      <td>张飞</td>
+      <td>笑</td>
+      <td>三地</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="9代码">9.代码</h2>
+
+<p>语法：
+单行代码：代码之间分别用一个反引号包起来</p>
+
+<p><code class="highlighter-rouge">代码内容</code></p>
+
+<p>代码块：(Ctrl Shift K)</p>
+
+<p>代码之间分别用三个反引号包起来，且两边的反引号单独占一行</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>​```
+  代码...
+  代码...
+  代码...
+​```
+</code></pre></div></div>
+
+<h2 id="10流程图">10.流程图</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>​```flow
+st=&gt;start: 开始
+op=&gt;operation: My Operation
+cond=&gt;condition: Yes or No?
+e=&gt;end
+st-&gt;op-&gt;cond
+cond(yes)-&gt;e
+cond(no)-&gt;op
+&amp;```
+</code></pre></div></div>
+
+:ET

@@ -1,0 +1,21 @@
+I"w<h1 id="css-html补充笔记">Css-Html补充笔记</h1>
+
+<h4 id="百度知识点">百度知识点</h4>
+
+<ul>
+  <li>白色背景和黑色背景下都能清楚的显示的字体的颜色是什么:
+    <ul>
+      <li>rgb（73,120,55）;</li>
+      <li>rgb（193,73,255）;</li>
+      <li>rgb（255,73,77）;</li>
+      <li>rgb（0,187,18）;</li>
+      <li>rgb（236,117,0）;</li>
+      <li>rgb（236,0,0）;</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="关于htmlconnection的问题解答">关于HtmlConnection的问题解答</h2>
+
+<p><img src="/home/lixuehe/.config/Typora/typora-user-images/1564022534231.png" alt="1564022534231" /></p>
+:ET

@@ -1,0 +1,114 @@
+I"�<h1 id="c">C</h1>
+
+<p><strong>如果pa是一个地址，那么*pa 就是取出这个地址对应的值；</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd ..        返回上一级
+cd ~         返回默认[根目录]
+cd ../..     返回上级的上级
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="数组">数组</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//一次性打印3个值，从0x7fffffffdea4开始，打印类型为d整形；
+(gdb) x/3d 0x7fffffffdea4
+	0x7fffffffdea4:	3	0	2
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#include &lt;stdio.h&gt;
+int main(){
+
+    int a=3;
+    int b=2;
+    int array[3];
+    array[0]=1;
+    array[1]=10;
+    array[2]=100;
+    int *p=&amp;a;
+    p+=3；//p[3]表示将内存地址往下移动3格，*p+=3 结果就是6，值+3,即在a的内存地址上
+    *p=101;//p[3]=101 
+    p=&amp;a;
+    int i;
+    for(i=0;i&lt;6;i++){
+        printf("*p=%d\n",*p);
+        p++;
+    }
+    printf("------------------------------------------------");
+    p=&amp;a;
+    for(i=0;i&lt;6;i++){
+        printf("*p=%d\n",p[i]);
+    }
+</code></pre></div></div>
+
+<p><img src="/home/lixuehe/.config/Typora/typora-user-images/1563775281485.png" alt="1563775281485" /></p>
+
+<p><img src="/home/lixuehe/.config/Typora/typora-user-images/1563775342847.png" alt="1563775342847" /></p>
+
+<p>结果为何不一一致：</p>
+
+<p>gdb调试是一次单独的运行，和正常编译后运行是不冲突的；</p>
+
+<p><img src="/home/lixuehe/.config/Typora/typora-user-images/1563775411229.png" alt="1563775411229" /></p>
+
+<p>为什么还会有重复的</p>
+
+<p>因为在分配内存是随机，对应的数值也是随机的；</p>
+
+<p>数组：本质是一个指针常量；</p>
+
+<p>指针，是一个指针变量；</p>
+
+<h4 id="指针数组和字符数组">指针数组和字符数组</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#include &lt;stdio.h&gt;
+int main(){
+
+    char str[]="hello";
+    char *str2="world";
+    char str3[10];
+    printf("input the value \n");
+    //当下边的值取str或者str3时，不需要写&amp;，因为本身这两个就是数组，而数组的本质就是一个内存地址，所以可以进行直接可以进行赋值；
+    //scanf("%s",str3/str);
+    //当下边的内容取值为str2时，因为str2是一个地址，存放的是“word”的内存地址，属于代码段，是不允许更改的（是编译后，在程序运行就已经加载好的）。堆和栈可以更改。
+    scanf("%s",str2);
+    printf("str is %s\n",str);
+    printf("str2 is %s\n",str2);
+    printf("str3 is %s\n",str3);
+}
+</code></pre></div></div>
+
+<blockquote>
+  <p>‘＼0’是判定字符数组结束的标识，表示这串字符到结尾了；或＇＼0＇是字符串的结束符，任何字符串之后都会自动加上＇＼0＇。</p>
+
+  <p>注意：在字符数组中’＼0’是占一个位置的。</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#include &lt;stdio.h&gt;
+int main(){
+
+    char str[]="hello";
+    char *str2="world";
+    char str3[10];
+    printf("input the value \n");
+    scanf("%s",str);
+    //str[3]='\0';
+    printf("str is %s\n",str);
+    printf("str2 is %s\n",str2);
+    printf("str3 is %s\n",str3);
+}
+此时并没有给str3进行赋值，但结果
+input the value 
+	aaaaaaaaaaaaaaaaa
+	str is aaaaaaaaaaaaaaaaa
+	str2 is world
+	str3 is aaaaaaaaaaa//str3中
+*** stack smashing detected ***: &lt;unknown&gt; terminated
+已放弃 (核心已转储)
+使用gdb 调试测试：
+
+
+
+</code></pre></div></div>
+
+:ET

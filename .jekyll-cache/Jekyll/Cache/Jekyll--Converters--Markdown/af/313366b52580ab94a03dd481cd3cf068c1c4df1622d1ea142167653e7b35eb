@@ -1,0 +1,144 @@
+I"�<h2 id="创建版本库">创建版本库</h2>
+
+<h3 id="版本库repository">版本库（repository）：</h3>
+
+<h6 id="又名仓库一个目录目录内所有文件都可被gitg管理每个文件的修改删除git都能跟踪以便任何时刻都可以追踪历史或者在将来的某个时刻可以还原">又名仓库，一个目录，目录内所有文件都可被Gitg管理，每个文件的修改/删除/Git都能跟踪，以便任何时刻都可以追踪历史，或者在将来的某个时刻可以“还原‘；</h6>
+
+<h5 id="版本库的创建">版本库的创建：</h5>
+
+<ol>
+  <li>
+    <p>首先，选择一个合适的位置，创建一个空目录：</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ mkdir learngit   创建名为learngit的子目录
+$ cd learngit      cd：进入该用户的主目录
+$ pwd              pwd：显示工作路径（Print Working Directory 的缩写）
+/home/lixuehe/learngit   结果为创建的learngit的工作路径
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p><code class="highlighter-rouge">pwd</code>命令用于显示当前目录</p>
+
+<h4 id="把文件添加到版本库">把文件添加到版本库</h4>
+
+<p>需要在cd 进入这个主目录的情况下才可以将文件添加</p>
+
+<p>第一步，用命令<code class="highlighter-rouge">git add</code>告诉Git，把文件添加到仓库：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git add readme.txt
+</code></pre></div></div>
+
+<p>执行上面的命令，没有任何显示，这就对了，Unix的哲学是“没有消息就是好消息”，说明添加成功。</p>
+
+<p>第二步，用命令<code class="highlighter-rouge">git commit</code>告诉Git，把文件提交到仓库：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git commit -m "wrote a readme file" 
+                            （-m后面输入的是本次提交的说明，可以输入任意内容，）
+</code></pre></div></div>
+
+<h3 id="小结">小结</h3>
+
+<p>初始化一个Git仓库，使用<code class="highlighter-rouge">git init</code>命令。</p>
+
+<p>添加文件到Git仓库，分两步：</p>
+
+<ol>
+  <li>
+    <p>使用命令<code class="highlighter-rouge">git add &lt;file&gt;</code>，注意，可反复多次使用，添加多个文件；</p>
+  </li>
+  <li>
+    <p>使用命令<code class="highlighter-rouge">git commit -m &lt;message&gt;</code>，完成</p>
+  </li>
+</ol>
+
+<hr />
+
+<p>##### 查看修改内容</p>
+
+<p>当<code class="highlighter-rouge">readme.txt</code>被修改过了，可以通过<strong>git diff</strong>查看修改内容；</p>
+
+<p>**git log **</p>
+
+<p>​    命令显示从最近到最远的提交日志 :可以查看对文件的修改</p>
+
+<p>–pretty=oneline`参数：  可以简化输出的结果</p>
+
+<p><strong>启动时光穿梭机，准备把<code class="highlighter-rouge">readme.txt</code>回退到上一个版本</strong>    git reset –hard HEAD^(用<code class="highlighter-rouge">HEAD</code>表示当前版本)；在重新回到刚才的状态：</p>
+
+<p>只要上面的命令行窗口还没有被关掉，你就可以顺着往上找啊找啊，找到那个<code class="highlighter-rouge">append GPL</code>的<code class="highlighter-rouge">commit id</code>是<code class="highlighter-rouge">1094adb...</code>，于是就可以指定回到未来的某个版本：</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ git reset --hard 1094a
+</code></pre></div></div>
+
+<p><strong>git reflog</strong>   用来记录你的每一次命令：</p>
+
+<h3 id="小结-1">小结</h3>
+
+<ul>
+  <li><code class="highlighter-rouge">HEAD</code>指向的版本就是当前版本，因此，Git允许我们在版本的历史之间穿梭，使用命令<code class="highlighter-rouge">git reset --hard commit_id</code>。</li>
+  <li>穿梭前，用<code class="highlighter-rouge">git log</code>可以查看提交历史，以便确定要回退到哪个版本。</li>
+  <li>要重返未来，用<code class="highlighter-rouge">git reflog</code>查看命令历史，以便确定要回到未来的哪个版本。</li>
+</ul>
+
+<h3 id="工作区和暂存区">工作区和暂存区</h3>
+
+<h4 id="工作区working-directory">工作区（Working Directory）</h4>
+
+<p>就是在电脑里能看到的目录，</p>
+
+<h4 id="版本库repository-1">版本库（Repository）</h4>
+
+<p>工作区有一个隐藏目录<code class="highlighter-rouge">.git</code>，这个不算工作区，而是Git的版本库。</p>
+
+<p>Git的版本库里存了很多东西，其中最重要的就是称为stage（或者叫index）的暂存区，还有Git为我们自动创建的第一个分支<code class="highlighter-rouge">master</code>，以及指向<code class="highlighter-rouge">master</code>的一个指针叫<code class="highlighter-rouge">HEAD</code>。</p>
+
+<p><img src="/home/lixuehe/下载/1.jpeg" alt="" /></p>
+
+<p><code class="highlighter-rouge">git add</code>命令实际上就是把要提交的所有修改放到暂存区（Stage），然后，执行<code class="highlighter-rouge">git commit</code>就可以一次性把暂存区的所有修改提交到分支。</p>
+
+<p><strong>Git是如何跟踪修改的:每次修改，如果不用<code class="highlighter-rouge">git add</code>到暂存区，那就不会加入到<code class="highlighter-rouge">commit</code>中。</strong></p>
+
+<h4 id="当想要撤回进行的修改时">当想要撤回进行的修改时：</h4>
+
+<h5 id="只是在工作区进行了修改并未提交到暂存区">只是在工作区进行了修改，并未提交到暂存区</h5>
+
+<p><strong><em>1. git checkout – file</em></strong>可以丢弃工作区的修改：还未进行git add到暂存区</p>
+
+<p>命令<code class="highlighter-rouge">git checkout -- readme.txt</code>意思就是，把<code class="highlighter-rouge">readme.txt</code>文件在工作区的修改全部撤销，这里有两种情况：</p>
+
+<p>一种是<code class="highlighter-rouge">readme.txt</code>自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；</p>
+
+<p>一种是<code class="highlighter-rouge">readme.txt</code>已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。</p>
+
+<p>总之，就是让这个文件回到最近一次<code class="highlighter-rouge">git commit</code>或<code class="highlighter-rouge">git add</code>时的状态。</p>
+
+<h5 id="在工作区进行了修改并且提交到了暂存区时进行撤销修改">在工作区进行了修改，并且提交到了暂存区时进行撤销修改：</h5>
+
+<p><strong><em>2.git reset</em></strong>命令既可以回退版本，也可以把暂存区的修改回退到工作区。当我们用<code class="highlighter-rouge">HEAD</code>时，表示最新的版本。</p>
+
+<ol>
+  <li>
+    <p>用命令<code class="highlighter-rouge">git reset HEAD &lt;file&gt;</code>可以把暂存区的修改撤销掉（unstage），重新放回工作区：此时暂存区是干净的，工作区有修改：</p>
+  </li>
+  <li>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>使用 git checkout -- readme.txt丢弃工作区的修改
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<h3 id="小结-2">小结</h3>
+
+<p>场景1：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令<code class="highlighter-rouge">git checkout -- file</code>。</p>
+
+<p>场景2：当你不但改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改，分两步，第一步用命令<code class="highlighter-rouge">git reset HEAD &lt;file&gt;</code>，就回到了场景1，第二步按场景1操作。</p>
+
+<p>场景3：已经提交了不合适的修改到版本库时，想要撤销本次提交，参考<a href="https://www.liaoxuefeng.com/wiki/896043488029600/897013573512192">版本回退</a>一节，不过前提是没有推送到远程库。</p>
+
+<h3 id="删除文件">删除文件</h3>
+
+<ul>
+  <li>rm test.txt</li>
+  <li></li>
+</ul>
+:ET

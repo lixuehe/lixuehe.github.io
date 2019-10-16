@@ -1,4 +1,4 @@
-I"_<h1 id="react基础">React基础</h1>
+I"�<h1 id="react基础">React基础</h1>
 
 <h3 id="十可复用组件">十.可复用组件</h3>
 
@@ -167,26 +167,26 @@ export default App;
   <li>
     <p>直接在JSX 中编写css样式</p>
 
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const Table=({list,pattern,onDissmisss})=&gt;
-    &lt;div className="table"&gt;
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>const Table=({list,pattern,onDissmisss})=&gt;
+    <span class="nt">&lt;div</span> <span class="na">className=</span><span class="s">"table"</span><span class="nt">&gt;</span>
       {list.filter(isSearched(pattern)).map(item=&gt;
-        &lt;div key={item.objectID} className="table-row"&gt;
-            &lt;span style={midColumn}&gt;
-              &lt;a href={item.url}&gt;{item.title}&lt;/a&gt;
-            &lt;/span&gt;
-            &lt;span style={smallColumn}&gt;{item.points}&lt;/span&gt;
-            &lt;span style={largeColumn}&gt;{item.author}&lt;/span&gt;
-            &lt;span style={midColumn}&gt;{item.num_comments}&lt;/span&gt;
-            &lt;span style={midColumn}&gt;
-              &lt;Button onClick={()=&gt;onDissmisss(item.objectID)}
+        <span class="nt">&lt;div</span> <span class="na">key=</span><span class="s">{item.objectID}</span> <span class="na">className=</span><span class="s">"table-row"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;span</span> <span class="na">style=</span><span class="s">{midColumn}</span><span class="nt">&gt;</span>
+              <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">{item.url}</span><span class="nt">&gt;</span>{item.title}<span class="nt">&lt;/a&gt;</span>
+            <span class="nt">&lt;/span&gt;</span>
+            <span class="nt">&lt;span</span> <span class="na">style=</span><span class="s">{smallColumn}</span><span class="nt">&gt;</span>{item.points}<span class="nt">&lt;/span&gt;</span>
+            <span class="nt">&lt;span</span> <span class="na">style=</span><span class="s">{largeColumn}</span><span class="nt">&gt;</span>{item.author}<span class="nt">&lt;/span&gt;</span>
+            <span class="nt">&lt;span</span> <span class="na">style=</span><span class="s">{midColumn}</span><span class="nt">&gt;</span>{item.num_comments}<span class="nt">&lt;/span&gt;</span>
+            <span class="nt">&lt;span</span> <span class="na">style=</span><span class="s">{midColumn}</span><span class="nt">&gt;</span>
+              <span class="nt">&lt;Button</span> <span class="na">onClick=</span><span class="s">{()=</span><span class="nt">&gt;</span>onDissmisss(item.objectID)}
                       className="button-inline"
               &gt;
                 Dissmiss  
-              &lt;/Button&gt; 
-            &lt;/span&gt;
-        &lt;/div&gt;
+              <span class="nt">&lt;/Button&gt;</span> 
+            <span class="nt">&lt;/span&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
         )}
-    &lt;/div&gt;
+    <span class="nt">&lt;/div&gt;</span>
   
 // 定义一些css的style样式
 const largeColumn = {

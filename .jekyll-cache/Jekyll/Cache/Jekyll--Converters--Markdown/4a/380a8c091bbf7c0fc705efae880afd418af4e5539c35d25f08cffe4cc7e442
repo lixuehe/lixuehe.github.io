@@ -1,4 +1,4 @@
-I"N`<h1 id="使用真实的api">使用真实的API</h1>
+I"Bk<h1 id="使用真实的api">使用真实的API</h1>
 
 <h3 id="一获取数据扩展操作符">一.获取数据+扩展操作符</h3>
 
@@ -514,7 +514,7 @@ export default App;
 
 <p>使用results 存储每次查找的内容，</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import React, { Component } from 'react';
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>import React, { Component } from 'react';
 // import logo from './logo.svg';
 import './App.css';
 // 设置好 URL 常量和默认参数,将 API 请求分解成几步
@@ -588,7 +588,7 @@ class App extends Component{
       const { searchKey, results } = this.state;
       // 如果页数为0则，则hits　是空的，不为０就为下一页，老的 hits 已经储存在状态中等待着与新的分页合并。 
       //如果在results 中没有查到，则为空，
-      const oldHits = results &amp;&amp; results[searchKey]?
+      const oldHits = results <span class="err">&amp;&amp;</span> results[searchKey]?
       results[searchKey].hits: [];
 
       const updatedHits = [
@@ -604,7 +604,7 @@ class App extends Component{
      });
   }
   fetchSearchTopStories(searchTeam,page=0) {
-    fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTeam}&amp;${PARAM_PAGE}${page}&amp;${PARAM_HPP}${DEFAULT_HPP}`)
+    fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTeam}<span class="err">&amp;</span>${PARAM_PAGE}${page}<span class="err">&amp;</span>${PARAM_HPP}${DEFAULT_HPP}`)
     //返回的响应需要被转化成 JSON 格式的数据结构
     .then(response =&gt; response.json())
     .then(result =&gt; this.setSearchTopStories(result))
@@ -625,63 +625,63 @@ class App extends Component{
       searchKey
       } = this.state;
       const page = (
-        results &amp;&amp;
-        results[searchKey] &amp;&amp;
+        results <span class="err">&amp;&amp;</span>
+        results[searchKey] <span class="err">&amp;&amp;</span>
         results[searchKey].page
       ) || 0;
       const list = (
-        results &amp;&amp;
-        results[searchKey] &amp;&amp;
+        results <span class="err">&amp;&amp;</span>
+        results[searchKey] <span class="err">&amp;&amp;</span>
         results[searchKey].hits
         ) || [];
       // 条件渲染
       // if (!result) { return null; }
         return (
-          &lt;div className="page"&gt;
-             &lt;div className="interactions"&gt;
+          <span class="nt">&lt;div</span> <span class="na">className=</span><span class="s">"page"</span><span class="nt">&gt;</span>
+             <span class="nt">&lt;div</span> <span class="na">className=</span><span class="s">"interactions"</span><span class="nt">&gt;</span>
               {/* 用于搜索的输入组件 */}
-                &lt;Search
-                  value={searchTeam}
-                  onChange={this.onSerachChange}
-                  onSubmit={this.onSerachSubmit}
-                  &gt;
+                <span class="nt">&lt;Search</span>
+                  <span class="na">value=</span><span class="s">{searchTeam}</span>
+                  <span class="na">onChange=</span><span class="s">{this.onSerachChange}</span>
+                  <span class="na">onSubmit=</span><span class="s">{this.onSerachSubmit}</span>
+                  <span class="nt">&gt;</span>
                     Search
-                  &lt;/Search&gt;
-        &lt;/div&gt;
-            &lt;Table
-              list={list}
-              onDissmisss={this.onDissmisss}
-            /&gt;
-          &lt;div className="interactions"&gt;
-            &lt;Button onClick={() =&gt; this.fetchSearchTopStories(searchKey, page + 1)}&gt;
+                  <span class="nt">&lt;/Search&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+            <span class="nt">&lt;Table</span>
+              <span class="na">list=</span><span class="s">{list}</span>
+              <span class="na">onDissmisss=</span><span class="s">{this.onDissmisss}</span>
+            <span class="nt">/&gt;</span>
+          <span class="nt">&lt;div</span> <span class="na">className=</span><span class="s">"interactions"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;Button</span> <span class="na">onClick=</span><span class="s">{()</span> <span class="err">=</span><span class="nt">&gt;</span> this.fetchSearchTopStories(searchKey, page + 1)}&gt;
               More
-            &lt;/Button&gt;
-          &lt;/div&gt;   
-   &lt;/div&gt;    
+            <span class="nt">&lt;/Button&gt;</span>
+          <span class="nt">&lt;/div&gt;</span>   
+   <span class="nt">&lt;/div&gt;</span>    
     )
   }
 }
 const Button=({onClick,className='',children,})=&gt;
-    &lt;button 
-      onClick={onClick}
-      className={className}
-      type="button"
-    &gt;
+    <span class="nt">&lt;button</span> 
+      <span class="na">onClick=</span><span class="s">{onClick}</span>
+      <span class="na">className=</span><span class="s">{className}</span>
+      <span class="na">type=</span><span class="s">"button"</span>
+    <span class="nt">&gt;</span>
       {children}
-    &lt;/button&gt;
+    <span class="nt">&lt;/button&gt;</span>
 //Search 组件
 const Search =({value,onChange,onSubmit,children})=&gt;
   // const {value,onChange,children}=props;
-    &lt;form onSubmit={onSubmit}&gt;
-      &lt;input
-        type="text"
-        value={value}
-        onChange={onChange}
-      /&gt;
-      &lt;button type="submit"&gt;
+    <span class="nt">&lt;form</span> <span class="na">onSubmit=</span><span class="s">{onSubmit}</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;input</span>
+        <span class="na">type=</span><span class="s">"text"</span>
+        <span class="na">value=</span><span class="s">{value}</span>
+        <span class="na">onChange=</span><span class="s">{onChange}</span>
+      <span class="nt">/&gt;</span>
+      <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>
         {children}
-      &lt;/button&gt;
-    &lt;/form&gt;
+      <span class="nt">&lt;/button&gt;</span>
+    <span class="nt">&lt;/form&gt;</span>
 //列表样式
 const largeColumn = {
   width: '30%',
@@ -693,27 +693,28 @@ const largeColumn = {
   width: '10%',
   };
 const Table=({list,onDissmisss})=&gt;
-    &lt;div className="table"&gt;
+    <span class="nt">&lt;div</span> <span class="na">className=</span><span class="s">"table"</span><span class="nt">&gt;</span>
     {/* 去掉了过滤 */}
       {list.map(item=&gt;
-        &lt;div key={item.objectID} className="table-row"&gt;
-            &lt;span style={midColumn}&gt;
-              &lt;a href={item.url}&gt;{item.title}&lt;/a&gt;
-            &lt;/span&gt;
-            &lt;span style={smallColumn}&gt;{item.points}&lt;/span&gt;
-            &lt;span style={largeColumn}&gt;{item.author}&lt;/span&gt;
-            &lt;span style={midColumn}&gt;{item.num_comments}&lt;/span&gt;
-            &lt;span style={midColumn}&gt;
-              &lt;Button onClick={()=&gt;onDissmisss(item.objectID)}
+        <span class="nt">&lt;div</span> <span class="na">key=</span><span class="s">{item.objectID}</span> <span class="na">className=</span><span class="s">"table-row"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;span</span> <span class="na">style=</span><span class="s">{midColumn}</span><span class="nt">&gt;</span>
+              <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">{item.url}</span><span class="nt">&gt;</span>{item.title}<span class="nt">&lt;/a&gt;</span>
+            <span class="nt">&lt;/span&gt;</span>
+            <span class="nt">&lt;span</span> <span class="na">style=</span><span class="s">{smallColumn}</span><span class="nt">&gt;</span>{item.points}<span class="nt">&lt;/span&gt;</span>
+            <span class="nt">&lt;span</span> <span class="na">style=</span><span class="s">{largeColumn}</span><span class="nt">&gt;</span>{item.author}<span class="nt">&lt;/span&gt;</span>
+            <span class="nt">&lt;span</span> <span class="na">style=</span><span class="s">{midColumn}</span><span class="nt">&gt;</span>{item.num_comments}<span class="nt">&lt;/span&gt;</span>
+            <span class="nt">&lt;span</span> <span class="na">style=</span><span class="s">{midColumn}</span><span class="nt">&gt;</span>
+              <span class="nt">&lt;Button</span> <span class="na">onClick=</span><span class="s">{()=</span><span class="nt">&gt;</span>onDissmisss(item.objectID)}
                       className="button-inline"
               &gt;
                 Dissmiss  
-              &lt;/Button&gt; 
-            &lt;/span&gt;
-        &lt;/div&gt;
+              <span class="nt">&lt;/Button&gt;</span> 
+            <span class="nt">&lt;/span&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
         )}
-    &lt;/div&gt;
+    <span class="nt">&lt;/div&gt;</span>
 
 export default App;
 </code></pre></div></div>
+
 :ET

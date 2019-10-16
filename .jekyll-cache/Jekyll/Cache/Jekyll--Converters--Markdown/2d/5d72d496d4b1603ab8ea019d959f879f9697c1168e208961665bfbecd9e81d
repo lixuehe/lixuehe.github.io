@@ -1,4 +1,4 @@
-I"��<h1 id="字符串的新增方法">字符串的新增方法</h1>
+I"��<h1 id="字符串的新增方法">字符串的新增方法</h1>
 
 <h4 id="1stringfromcodepoint">1.String.fromCodePoint()</h4>
 
@@ -1140,11 +1140,12 @@ Fibonacci2(10000) // Infinity
 
 <p>==&gt;</p>
 
-<div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">//允许catch语句省略参数。</span>
-<span class="k">try</span> <span class="p">{</span>
-  <span class="c1">// ...</span>
-<span class="p">}</span> <span class="k">catch</span> <span class="p">{</span>
-  <span class="c1">// ...</span>
-<span class="err">｝</span>
-</code></pre></div></div>
+<pre><code class="language-jvascript">//允许catch语句省略参数。
+try {
+  // ...
+} catch {
+  // ...
+｝
+</code></pre>
+
 :ET
